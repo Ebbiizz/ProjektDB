@@ -8,6 +8,8 @@
         public int Player2Id { get; set; }
         public int CurrentTurn { get; set; }
         public DateTime CreatedAt {  get; set; }
-        public enum Status { get; set;  }
+        public Status Status { get; set;  }
+
+        public int WinnerId { get; set; } 
     }
 }
