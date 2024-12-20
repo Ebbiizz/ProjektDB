@@ -1,0 +1,38 @@
+﻿@model ProjektDB.Models.Users
+
+@{
+    ViewData["Title"] = "Registrera konto";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label for="Username">Användarnamn</label>
+        <input type="text" id="Username" asp-for="Username" required />
+    </div>
+    <div>
+        <label for="Password">Lösenord</label>
+        <input type="password" id="Password" asp-for="Password" required />
+    </div>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div style="color: red;">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div style="color: green;">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+
+    <button type="submit">Registrera</button>
+</form>
+
+<div>
+    <p>Har du ett konto? <a href="@Url.Action("Login", "Login")">Logga in här</a></p>
+</div>
