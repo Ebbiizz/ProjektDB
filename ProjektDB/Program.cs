@@ -9,6 +9,12 @@ namespace ProjektDB
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Add sessions
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -25,6 +31,8 @@ namespace ProjektDB
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
