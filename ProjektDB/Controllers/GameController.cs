@@ -29,7 +29,35 @@ namespace ProjektDB.Controllers
         [HttpPost]
         public IActionResult CreateGame()
         {
+            //Skapa spel
+        }
 
+        [HttpGet]
+        public IActionResult JoinGame()
+        {
+            //Gå med i spel
+        }
+
+        private Statistics UserStatistics(int userId)
+        {
+            GamesMethods gamesMethods = new GamesMethods();
+            string error;
+            var userStats = gamesMethods.GetUsersStatistics(userId, out error);
+            //förmodligen bäst att göra ett DAL som ex. heter StatisticsMethods som kombinerar Users och Games osv.
+            //Byt ut GamesMethods till StatisticsMethods isf.
+
+            if (error != null)
+            {
+                return new Statistics //Göra en ny modell som heter Statistics för att enkelt lagra statistik
+                {
+                    MatchesPlayed = 0,
+                    MatchesWon = 0,
+                    MatchesLost = 0,
+                    WinPercentage = 0.0
+                };
+            }
+
+            return userStats;
         }
     }
 }
