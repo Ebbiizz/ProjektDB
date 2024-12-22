@@ -1,0 +1,10 @@
+﻿@model List<ProjektDB.Models.Games>
+
+<h1>Lobby</h1>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<button onclick="location.href='@Url.Action("CreateGame", "Game")'" class="btn btn-primary">Skapa nytt spel</button>

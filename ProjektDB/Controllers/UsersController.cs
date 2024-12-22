@@ -3,7 +3,7 @@ using ProjektDB.Models;
 
 namespace ProjektDB.Controllers
 {
-    public class LoginController : Controller
+    public class UsersController : Controller
     {
         [HttpGet]
         public IActionResult Login()
