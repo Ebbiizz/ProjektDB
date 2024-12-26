@@ -29,13 +29,35 @@ namespace ProjektDB.Controllers
         [HttpPost]
         public IActionResult CreateGame()
         {
-            //Skapa spel
+            if (!HttpContext.Session.Keys.Contains("UserId"))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            GamesMethods gamesMethods = new GamesMethods();
+            string error;
+
+            bool success = gamesMethods.CreateNewGame(userId, out error); //Ska brädet initialiseras här eller ska det hanteras på eget sätt?
+
+            if (!success)
+            {
+                ViewBag.ErrorMessage = "Spelet kunde inte skapas: " + error;
+                return View("Lobby"); 
+            }
+
+            return RedirectToAction("Game"); // omdirigera till spelet
         }
+
+
 
         [HttpGet]
         public IActionResult JoinGame()
         {
-            //Gå med i spel
+            // Kontrollera om det finns spel med en ledig plats. //skapa en DAL-metod som kontrollerar.
+            // Anslut spelaren som Player2 i spelet.
+            // Uppdatera spelstatusen //lägga till i modellen om att det är en "sökande"-status
         }
 
         private Statistics UserStatistics(int userId)
@@ -59,5 +81,29 @@ namespace ProjektDB.Controllers
 
             return userStats;
         }
+
+        /*---------------------------------------------- Game Logic ----------------------------------------------*/
+
+        // Placera skepp
+        // Tillåt spelarna att placera sina skepp i tur och ordning.
+        // Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
+        // När båda spelarnas placeringar är validerade = spela
+
+        // Hantera turordning:
+        // Kontrollera om det är spelarens tur.
+        // Låt spelaren välja en position att skjuta på.
+
+        // Placera skott
+        // Validera om skottet är på en giltig position.
+        // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
+
+        //Kontrollera om spelet är slut
+
+        // Hantera att återuppta ett spel
+        // Ladda tidigare spelstatus, inklusive: skeppens placering, skott, vems tur det är
+
+        //När spelet är slut: Uppdatera statistiken
+
+
     }
 }
