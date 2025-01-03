@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ProjektDB.Models;
 
 namespace ProjektDB.Controllers
@@ -56,8 +57,16 @@ namespace ProjektDB.Controllers
 
             if (usersMethods.IsUsernameTaken(user.Username, out string error))
             {
-                ViewBag.ErrorMessage = error ?? "Användarnamnet är upptaget.";
-                return View();
+                if (error.IsNullOrEmpty())
+                {
+                    ViewBag.ErrorMessage = error ?? "Användarnamnet är upptaget.";
+                    return View();
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = error ?? "Användarnamnet kunde inte skapas.";
+                    return View();
+                }
             }
 
             string hashedPassword = HashPassword(user.Password);
