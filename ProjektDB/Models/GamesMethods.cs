@@ -9,7 +9,7 @@ namespace ProjektDB.Models
         public List<Games> GetActiveGames(out string errormsg) 
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "";
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             string sqlstring = "Select * From Games Where Status = ´active´";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
@@ -52,6 +52,41 @@ namespace ProjektDB.Models
             {
                 errormsg = e.Message;
                 return null;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+        public bool CreateNewGame(int userId, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string sqlstring = "Insert Into Games (Player1Id, CreatedAt, Status) Values (@Player1Id, @CreatedAt, @Status)";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("Player1Id", System.Data.SqlDbType.Int).Value = userId;
+            sqlCommand.Parameters.Add("CreatedAt", System.Data.SqlDbType.Date).Value = DateTime.Now;
+            sqlCommand.Parameters.Add("Status", System.Data.SqlDbType.NVarChar).Value = "Waiting";
+
+            try
+            {
+                sqlConnection.Open();
+                int i = 0;
+                i = sqlCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    errormsg = "";
+                }
+                else
+                {
+                    errormsg = "Insert command failed";
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errormsg = ex.Message;
+                return false;
             }
             finally
             {
