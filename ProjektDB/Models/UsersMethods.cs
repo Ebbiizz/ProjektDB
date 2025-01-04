@@ -66,7 +66,10 @@ namespace ProjektDB.Models
                         foundUser.Password = dataSet.Tables["Users"].Rows[i]["Username"].ToString();
                         if (foundUser.Username == username)
                         {
-                            searchedUser = foundUser;
+                            if (foundUser.Password == password)
+                            {
+                                searchedUser = foundUser;
+                            }
                         }
                         
                         i++;
