@@ -37,9 +37,8 @@ namespace ProjektDB.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             GamesMethods gamesMethods = new GamesMethods();
-            string error;
 
-            bool success = gamesMethods.CreateNewGame(userId, out error); //Ska brädet initialiseras här eller ska det hanteras på eget sätt?
+            bool success = gamesMethods.CreateNewGame(userId, out string error); //Ska brädet initialiseras här eller ska det hanteras på eget sätt?
 
             if (!success)
             {
@@ -51,14 +50,39 @@ namespace ProjektDB.Controllers
         }
 
 
-
         [HttpGet]
         public IActionResult JoinGame()
         {
-            // Kontrollera om det finns spel med en ledig plats. //skapa en DAL-metod som kontrollerar.
-            // Anslut spelaren som Player2 i spelet.
-            // Uppdatera spelstatusen //lägga till i modellen om att det är en "sökande"-status
+            if (!HttpContext.Session.Keys.Contains("UserId"))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            GamesMethods gamesMethods = new GamesMethods();
+
+            var availableGame = gamesMethods.GetAvailableGame(out string error); // GetAvailableGames = hämta ett spel som är waiting och väntar på en spelare som ska joina.
+
+            if (availableGame == null)
+            {
+                ViewBag.ErrorMessage = "Inga tillgängliga spel.";
+                return View("Lobby");
+            }
+
+            bool success = gamesMethods.JoinGame(availableGame.Id, userId, out error); // JoinGame = Lägg till spelaren i tabellen kopplat till spelet och ändra status till active
+
+            if (!success)
+            {
+                ViewBag.ErrorMessage = "Kunde inte ansluta till spelet: " + error;
+                return View("Lobby");
+            }
+
+            // SignalR notis = hub?
+
+            return RedirectToAction("Game", new { gameId = availableGame.Id });
         }
+
 
         private Statistics UserStatistics(int userId)
         {
