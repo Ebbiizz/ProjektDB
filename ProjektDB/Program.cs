@@ -1,3 +1,5 @@
+using ProjektDB.Hubs;
+
 namespace ProjektDB
 {
     public class Program
@@ -8,6 +10,8 @@ namespace ProjektDB
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddSignalR();
 
             // Add sessions
             builder.Services.AddSession(options =>
@@ -29,6 +33,8 @@ namespace ProjektDB
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.MapHub<GameHub>("/gameHub");
 
             app.UseAuthorization();
 

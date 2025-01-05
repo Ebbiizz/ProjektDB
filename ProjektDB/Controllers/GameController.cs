@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ProjektDB.Models;
+
+////Lägg in i alla vyer för att signal r ska funka:
+//<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.9/signalr.min.js"></script>
+//<script src="~/wwwroot/js/gameHub.js"></script>
+
 
 namespace ProjektDB.Controllers
 {
@@ -83,6 +89,27 @@ namespace ProjektDB.Controllers
             return RedirectToAction("Game", new { gameId = availableGame.Id });
         }
 
+        [HttpPost]
+        public IActionResult PlaceShip(int gameId, int startX, int startY, int endX, int endY, ShipType shipType)
+        {
+            if (!HttpContext.Session.Keys.Contains("UserId"))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            BoardsMethods boardsMethods = new BoardsMethods();
+
+            bool success = boardsMethods.PlaceShip(gameId, userId, startX, startY, endX, endY, shipType, out string error);
+            //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
+
+
+            //SignalR för att uppdatera. Hålla koll på vilka som placerats?
+
+            //omdirigera till spelvy med uppdaterat bräde (js och signalr)
+        }
+
 
         private Statistics UserStatistics(int userId)
         {
@@ -107,11 +134,6 @@ namespace ProjektDB.Controllers
         }
 
         /*---------------------------------------------- Game Logic ----------------------------------------------*/
-
-        // Placera skepp
-        // Tillåt spelarna att placera sina skepp i tur och ordning.
-        // Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
-        // När båda spelarnas placeringar är validerade = spela
 
         // Hantera turordning:
         // Kontrollera om det är spelarens tur.
