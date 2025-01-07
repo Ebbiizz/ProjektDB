@@ -136,6 +136,8 @@ namespace ProjektDB.Controllers
             ShotsMethods shotsMethods = new ShotsMethods();
 
             bool hit = shotsMethods.FireShot(gameId, userId, targetX, targetY, out string error);
+            // Validera om skottet är på en giltig position.
+            // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
 
             if (!string.IsNullOrEmpty(error))
             {
@@ -149,46 +151,61 @@ namespace ProjektDB.Controllers
             return Json(new { success = true, hit, gameOver });
         }
 
-
-        private Statistics UserStatistics(int userId)
+        public IActionResult ResumeGame(int gameId) //Lagra gameID i vyn för ouppklarade games
         {
+            if (!HttpContext.Session.Keys.Contains("UserId"))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
             GamesMethods gamesMethods = new GamesMethods();
-            string error;
-            var userStats = gamesMethods.GetUsersStatistics(userId, out error);
-            //förmodligen bäst att göra ett DAL som ex. heter StatisticsMethods som kombinerar Users och Games osv.
-            //Byt ut GamesMethods till StatisticsMethods isf.
+            var game = gamesMethods.GetGameById(gameId, out string error);
+            // Ladda tidigare spelstatus, inklusive: skeppens placering, skott, vems tur det är.
+            // spelstatus hämtas i samband med GameID men hur hämtas skeppens placering, skott och vems tur det är? Kan ej hitta att det är PK/FK någonstans till gameID
+
+            if (game == null || !string.IsNullOrEmpty(error))
+            {
+                ViewBag.ErrorMessage = "Spelet kunde inte laddas: " + error;
+                return View("Lobby");
+            }
+
+            return View("Game", game);
+        }
+
+
+        private void UpdateStatistics(int userId)
+        {
+            StatisticsMethods statisticsMethods = new StatisticsMethods();
+            var userStats = statisticsMethods.GetUserStatistics(userId, out string error);
 
             if (error != null)
             {
-                return new Statistics //Göra en ny modell som heter Statistics för att enkelt lagra statistik
+                _hubContext.Clients.User(userId.ToString()).SendAsync("StatisticsUpdated", new
                 {
                     MatchesPlayed = 0,
                     MatchesWon = 0,
                     MatchesLost = 0,
                     WinPercentage = 0.0
-                };
+                });
             }
 
-            return userStats;
+            _hubContext.Clients.User(userId.ToString()).SendAsync("StatisticsUpdated", new
+            {
+                MatchesPlayed = userStats.MatchesPlayed,
+                MatchesWon = userStats.MatchesWon,
+                MatchesLost = userStats.MatchesLost,
+                WinPercentage = userStats.WinPercentage
+            });
         }
+
 
         /*---------------------------------------------- Game Logic ----------------------------------------------*/
 
         // Hantera turordning:
         // Kontrollera om det är spelarens tur.
         // Låt spelaren välja en position att skjuta på.
-
-        // Placera skott
-        // Validera om skottet är på en giltig position.
-        // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
-
-        //Kontrollera om spelet är slut
-
-        // Hantera att återuppta ett spel
-        // Ladda tidigare spelstatus, inklusive: skeppens placering, skott, vems tur det är
-
-        //När spelet är slut: Uppdatera statistiken
-
 
     }
 }
