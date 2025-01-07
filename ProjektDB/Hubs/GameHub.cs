@@ -20,8 +20,34 @@ namespace ProjektDB.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, gameId.ToString());
         }
 
-        //Ships - placera skotten - ändra vy genom .js
+        public async Task ShipPlaced(int gameId, int userId, int startX, int startY, int endX, int endY, string shipType)
+        {
+            await Clients.Group(gameId.ToString()).SendAsync("ShipPlaced", new
+            {
+                userId,
+                startX,
+                startY,
+                endX,
+                endY,
+                shipType
+            });
+        }
 
-        //fireShot - placera skott - ändra vy via .js
+        public async Task FireShot(int gameId, int userId, int targetX, int targetY, bool hit, bool gameOver)
+        {
+            await Clients.Group(gameId.ToString()).SendAsync("ShotFired", new
+            {
+                userId,
+                targetX,
+                targetY,
+                hit,
+                gameOver
+            });
+        }
+
+        public async Task PlayerJoined(int gameId, int userId)
+        {
+            await Clients.Group(gameId.ToString()).SendAsync("PlayerJoined", userId);
+        }
     }
 }

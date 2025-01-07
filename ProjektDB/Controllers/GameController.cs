@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using ProjektDB.Hubs;
 using ProjektDB.Models;
 
 ////Lägg in i alla vyer för att signal r ska funka:
@@ -11,6 +12,13 @@ namespace ProjektDB.Controllers
 {
     public class GameController : Controller
     {
+        private readonly IHubContext<GameHub> _hubContext; //Signal-R
+
+        public GameController(IHubContext<GameHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         [HttpGet]
         public IActionResult Lobby()
         {
@@ -84,7 +92,7 @@ namespace ProjektDB.Controllers
                 return View("Lobby");
             }
 
-            // SignalR notis = hub?
+            _hubContext.Clients.Group(availableGame.Id.ToString()).SendAsync("PlayerJoined", userId);
 
             return RedirectToAction("Game", new { gameId = availableGame.Id });
         }
@@ -105,9 +113,40 @@ namespace ProjektDB.Controllers
             //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
 
 
-            //SignalR för att uppdatera. Hålla koll på vilka som placerats?
+            if (!success)
+            {
+                return Json(new { success = false, message = error });
+            }
 
-            //omdirigera till spelvy med uppdaterat bräde (js och signalr)
+            _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShipPlaced", new { userId, startX, startY, endX, endY, shipType });
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public IActionResult FireShot(int gameId, int targetX, int targetY)
+        {
+            if (!HttpContext.Session.Keys.Contains("UserId"))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            ShotsMethods shotsMethods = new ShotsMethods();
+
+            bool hit = shotsMethods.FireShot(gameId, userId, targetX, targetY, out string error);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                return Json(new { success = false, message = error });
+            }
+
+            bool gameOver = shotsMethods.CheckIfGameOver(gameId, out error);
+
+            _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
+
+            return Json(new { success = true, hit, gameOver });
         }
 
 
