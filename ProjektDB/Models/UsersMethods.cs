@@ -9,7 +9,8 @@ namespace ProjektDB.Models
         public int InsertUser(Users user, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=34.88.126.119,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
+
             string sqlstring = "Insert Into Users (Username, Password) Values (@Username, @Password)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("Username", System.Data.SqlDbType.NVarChar, 50).Value = user.Username;
