@@ -3,3 +3,49 @@
     Username VARCHAR(50) NOT NULL,
     PasswordHash VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE Games (
+    GameID INT NOT NULL PRIMARY KEY,
+    Player1ID INT NOT NULL,
+    Player2ID INT NOT NULL,
+    CurrentTurn INT,
+    CreatedAt DATETIME NOT NULL,
+    Status INT NOT NULL CHECK (Status IN (0, 1, 2, 3)), 
+    WinnerID INT,
+    FOREIGN KEY (Player1ID) REFERENCES Users(UserID),
+    FOREIGN KEY (Player2ID) REFERENCES Users(UserID),
+    FOREIGN KEY (WinnerID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Boards (
+    BoardID INT NOT NULL PRIMARY KEY,
+    GameID INT NOT NULL,
+    UserID INT NOT NULL,
+    SizeX INT NOT NULL,
+    SizeY INT NOT NULL,
+    FOREIGN KEY (GameID) REFERENCES Games(GameID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Ships (
+    ShipID INT NOT NULL PRIMARY KEY,
+    BoardID INT NOT NULL,
+    Type INT NOT NULL CHECK (Type IN (0, 1, 2, 3, 4)),
+    StartX INT NOT NULL,
+    StartY INT NOT NULL,
+    EndX INT NOT NULL,
+    EndY INT NOT NULL,
+    FOREIGN KEY (BoardID) REFERENCES Boards(BoardID)
+);
+
+CREATE TABLE Shots (
+    ShotID INT NOT NULL PRIMARY KEY,
+    GameID INT NOT NULL,
+    ShooterID INT NOT NULL,
+    TargetX INT NOT NULL,
+    TargetY INT NOT NULL,
+    Hit BIT NOT NULL,
+    ShotTime DATETIME NOT NULL,
+    FOREIGN KEY (GameID) REFERENCES Games(GameID),
+    FOREIGN KEY (ShooterID) REFERENCES Users(UserID)
+);
