@@ -98,7 +98,7 @@ namespace ProjektDB.Controllers
         }
 
         [HttpPost]
-        public IActionResult PlaceShip(int boardId, int startX, int startY, int endX, int endY, ShipType shipType)
+        public IActionResult PlaceShip(int gameId, int startX, int startY, int endX, int endY, ShipType shipType)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
             {
@@ -108,7 +108,7 @@ namespace ProjektDB.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             ShipsMethods shipsMethods = new ShipsMethods();
-
+            //Fixa metod för att hämta board id
             bool success = shipsMethods.PlaceShip(boardId, startX, startY, endX, endY, shipType, out string error);
             //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
 
