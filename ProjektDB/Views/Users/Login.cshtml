@@ -3,28 +3,30 @@
 @{
     ViewData["Title"] = "Logga in";
 }
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-5">
+    <h1 class="text-center">Logga in</h1>
+    <p class="text-center">Fyll i ditt användarnamn och lösenord för att logga in.</p>
 
-<form asp-action="Login" method="post">
-    <div>
-        <label for="Username">Användarnamn</label>
-        <input type="text" id="Username" asp-for="Username" required />
-    </div>
-    <div>
-        <label for="Password">Lösenord</label>
-        <input type="password" id="Password" asp-for="Password" required />
-    </div>
-
-    @if (ViewBag.ErrorMessage != null)
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
-        <div style="color: red;">
+        <div class="alert alert-danger text-center">
             @ViewBag.ErrorMessage
         </div>
     }
 
-    <button type="submit">Logga in</button>
-</form>
+    <form asp-controller="Users" asp-action="Login" method="post" class="mt-4">
+        <div class="mb-3">
+            <label for="Username" class="form-label">Användarnamn</label>
+            <input type="text" class="form-control" id="Username" name="Username" placeholder="Skriv ditt användarnamn" required />
+        </div>
+        <div class="mb-3">
+            <label for="Password" class="form-label">Lösenord</label>
+            <input type="password" class="form-control" id="Password" name="Password" placeholder="Skriv ditt lösenord" required />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Logga in</button>
+    </form>
 
-<div>
-    <p>Har du inte ett konto? <a href="@Url.Action("Register", "Login")">Registrera dig här</a></p>
+    <div class="mt-3 text-center">
+        <p>Har du inget konto? <a asp-controller="Users" asp-action="Register">Registrera dig här</a>.</p>
+    </div>
 </div>
