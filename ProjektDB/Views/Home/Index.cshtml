@@ -1,8 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Sänka Skepp";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <h1>Välkommen till Sänka Skepp Multiplayer!</h1>
+    <p>Vänligen logga in eller registrera dig för att börja spela.</p>
+
+    <div class="mt-4">
+        <a asp-controller="Users" asp-action="Login" class="btn btn-primary btn-lg me-3">Logga in</a>
+
+        <a asp-controller="Users" asp-action="Register" class="btn btn-secondary btn-lg">Registrera</a>
+    </div>
 </div>
