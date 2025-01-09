@@ -104,7 +104,7 @@ namespace ProjektDB.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
-
+            //Skapa ett brädde fixar en CreateBoard metod i BoardsMethods
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             BoardsMethods boardsMethods = new BoardsMethods();
