@@ -4,35 +4,38 @@
     ViewData["Title"] = "Registrera konto";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-5">
+    <h1 class="text-center">Registrera dig</h1>
+    <p class="text-center">Skapa ett konto för att börja spela!</p>
 
-<form asp-action="Register" method="post">
-    <div>
-        <label for="Username">Användarnamn</label>
-        <input type="text" id="Username" asp-for="Username" required />
-    </div>
-    <div>
-        <label for="Password">Lösenord</label>
-        <input type="password" id="Password" asp-for="Password" required />
-    </div>
-
-    @if (ViewBag.ErrorMessage != null)
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
-        <div style="color: red;">
+        <div class="alert alert-danger text-center">
             @ViewBag.ErrorMessage
         </div>
     }
 
-    @if (ViewBag.SuccessMessage != null)
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
     {
-        <div style="color: green;">
+        <div class="alert alert-success text-center">
             @ViewBag.SuccessMessage
         </div>
     }
 
-    <button type="submit">Registrera</button>
-</form>
+    <form asp-controller="Users" asp-action="Register" method="post" class="mt-4">
+        <div class="mb-3">
+            <label for="Username" class="form-label">Användarnamn</label>
+            <input type="text" id="Username" name="Username" class="form-control" placeholder="Ange användarnamn" required />
+        </div>
 
-<div>
-    <p>Har du ett konto? <a href="@Url.Action("Login", "Login")">Logga in här</a></p>
+        <div class="mb-3">
+            <label for="Password" class="form-label">Lösenord</label>
+            <input type="password" id="Password" name="Password" class="form-control" placeholder="Ange lösenord" required />
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Registrera</button>
+            <a asp-controller="Users" asp-action="Login" class="btn btn-link">Har du redan ett konto? Logga in här</a>
+        </div>
+    </form>
 </div>
