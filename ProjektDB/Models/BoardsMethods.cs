@@ -41,5 +41,6 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
+        public bool PlaceShips(int gameId,int userId,int startX,int startY)
     }
 }

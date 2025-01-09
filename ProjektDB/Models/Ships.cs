@@ -4,6 +4,7 @@
     {
         public Ships() { }
         public int Id { get; set; }
+        public int BoardId { get; set; }
         public ShipType Type { get; set; }
         public int StartX { get; set; }
         public int StartY { get; set; }
