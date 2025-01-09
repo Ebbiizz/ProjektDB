@@ -65,7 +65,7 @@ namespace ProjektDB.Controllers
 
 
         [HttpGet]
-        public IActionResult JoinGame()
+        public IActionResult JoinGame(int gameId)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
             {
@@ -73,18 +73,18 @@ namespace ProjektDB.Controllers
             }
 
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-
+            
             GamesMethods gamesMethods = new GamesMethods();
+            //Kommer som en lista lättast att använda i en egen funktion?
+            List<Games> availableGamesList = gamesMethods.GetAvailableGame(out string error); // GetAvailableGames = hämta ett spel som är waiting och väntar på en spelare som ska joina.
 
-            var availableGame = gamesMethods.GetAvailableGame(out string error); // GetAvailableGames = hämta ett spel som är waiting och väntar på en spelare som ska joina.
-
-            if (availableGame == null)
+            if (availableGamesList == null)
             {
                 ViewBag.ErrorMessage = "Inga tillgängliga spel.";
                 return View("Lobby");
             }
-
-            bool success = gamesMethods.JoinGame(availableGame.Id, userId, out error); // JoinGame = Lägg till spelaren i tabellen kopplat till spelet och ändra status till active
+            //Hämta id in i funktionen
+            bool success = gamesMethods.JoinGame(gameId, userId, out error); // JoinGame = Lägg till spelaren i tabellen kopplat till spelet och ändra status till active
 
             if (!success)
             {
@@ -92,9 +92,9 @@ namespace ProjektDB.Controllers
                 return View("Lobby");
             }
 
-            _hubContext.Clients.Group(availableGame.Id.ToString()).SendAsync("PlayerJoined", userId);
+            _hubContext.Clients.Group(gameId.ToString()).SendAsync("PlayerJoined", userId);
 
-            return RedirectToAction("Game", new { gameId = availableGame.Id });
+            return RedirectToAction("Game", new { gameId = gameId });
         }
 
         [HttpPost]
