@@ -163,7 +163,7 @@ namespace ProjektDB.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             GamesMethods gamesMethods = new GamesMethods();
-            var game = gamesMethods.GetGameById(gameId, out string error);
+            Games game = gamesMethods.GetGameById(gameId, out string error);
             // Ladda tidigare spelstatus, inklusive: skeppens placering, skott, vems tur det är.
             // spelstatus hämtas i samband med GameID men hur hämtas skeppens placering, skott och vems tur det är? Kan ej hitta att det är PK/FK någonstans till gameID
 
