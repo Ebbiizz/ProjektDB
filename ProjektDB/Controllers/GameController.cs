@@ -108,8 +108,10 @@ namespace ProjektDB.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             ShipsMethods shipsMethods = new ShipsMethods();
-            //Fixa metod för att hämta board id
-            bool success = shipsMethods.PlaceShip(boardId, startX, startY, endX, endY, shipType, out string error);
+            BoardsMethods boardMethods = new BoardsMethods();
+            Boards board = boardMethods.GetBoard(gameId, userId, out string errormsg);
+
+            bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, shipType, out string error);
             //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
 
 

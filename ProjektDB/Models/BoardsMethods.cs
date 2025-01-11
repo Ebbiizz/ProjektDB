@@ -42,7 +42,7 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
-        Boards GetBoard(int gameId,int userId, out string errormsg)
+        public Boards GetBoard(int gameId,int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
