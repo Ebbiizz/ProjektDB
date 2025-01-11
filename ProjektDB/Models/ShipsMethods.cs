@@ -50,5 +50,9 @@ namespace ProjektDB.Models
                 return false;
             }
         }
+        public List<Ships> GetShipsOnBoard(int boardId, out string errormsg)
+        {
+
+        }
     }
 }
