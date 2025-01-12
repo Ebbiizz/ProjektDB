@@ -65,7 +65,7 @@ namespace ProjektDB.Controllers
             int recentGameId = gamesMethods.GetRecentGameId(out string errormsg);
 
 
-            bool boardCreated = boardMethods.CreateBoard(recentGameId, userId, out string boardError); //skapa en metod som hämtar senast skapat game-id.
+            bool boardCreated = boardMethods.CreateBoard(recentGameId, userId, out string boardError);
 
             if (!boardCreated)
             {
