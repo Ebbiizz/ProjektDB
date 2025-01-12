@@ -15,7 +15,7 @@ namespace ProjektDB.Models
                 string sqlstring = "Insert Into Ships (BoardId, ShipType, StartX, StartY, EndX, EndY) Values (@BoardId, @ShipType, @StartX, @StartY, @EndX, @EndY)";
                 SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
                 sqlCommand.Parameters.Add("BoardId", System.Data.SqlDbType.Int).Value = boardId;
-                sqlCommand.Parameters.Add("ShipType", System.Data.SqlDbType.Int).Value = shipType;
+                sqlCommand.Parameters.Add("ShipType", System.Data.SqlDbType.NVarChar).Value = shipType;
                 sqlCommand.Parameters.Add("StartX", System.Data.SqlDbType.Int).Value = startX;
                 sqlCommand.Parameters.Add("StartY", System.Data.SqlDbType.Int).Value = startY;
                 sqlCommand.Parameters.Add("EndX", System.Data.SqlDbType.Int).Value = endX;
