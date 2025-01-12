@@ -103,5 +103,6 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
+        //Räcker det med att bara tabort brädet?
     }
 }

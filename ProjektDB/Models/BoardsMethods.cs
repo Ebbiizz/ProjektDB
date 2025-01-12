@@ -90,5 +90,37 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
+        public int RemoveBoard(int userId, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab2U1;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            string sqlstring = "Delete From Boards Where userId = @userId";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;
+            try
+            {
+                sqlConnection.Open();
+                int i = 0;
+                i = sqlCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    errormsg = "";
+                }
+                else
+                {
+                    errormsg = "Remove command failed";
+                }
+                return i;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }
