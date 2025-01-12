@@ -44,7 +44,7 @@ namespace ProjektDB.Models
 
                 //Lägg in i databasen
                 SqlConnection sqlConnection = new SqlConnection();
-                sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
                 string sqlstring = "Insert Into Shots (GameId, ShooterId, TargetX, TargetY, Hit, ShotTime) Values (@GameId, @ShooterId, @TargetX, @TargetY, @Hit, @ShotTime)";
                 SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
                 sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
@@ -87,7 +87,7 @@ namespace ProjektDB.Models
         public bool CheckIfGameOver(int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select Count(*) From Shots Where ShooterId = @ShooterId and hit = 'true'";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("ShooterId", System.Data.SqlDbType.Int).Value = userId;
@@ -119,7 +119,7 @@ namespace ProjektDB.Models
         public int ClearShots(int userId, out string errormsg) 
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab2U1;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Delete From Shots Where userId = @userId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;

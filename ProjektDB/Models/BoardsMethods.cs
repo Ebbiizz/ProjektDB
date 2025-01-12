@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace ProjektDB.Models
@@ -9,7 +10,7 @@ namespace ProjektDB.Models
         public bool CreateBoard(int gameId, int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Insert Into Boards (GameId, UserId, SizeX, SizeY) Values (@GameId, @UserId, @SizeX, @SizeY)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
@@ -45,7 +46,7 @@ namespace ProjektDB.Models
         public Boards GetBoard(int gameId,int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Boards Where GameId = @GameId and UserId = @UserId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
@@ -93,7 +94,7 @@ namespace ProjektDB.Models
         public int RemoveBoard(int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab2U1;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            sqlConnection.ConnectionString = "Server = 35.228.190.64,1433; Database = sankaskepp; User Id = sqlserver; Password = Databas123; Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Delete From Boards Where userId = @userId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;

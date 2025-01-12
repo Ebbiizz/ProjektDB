@@ -44,7 +44,7 @@ namespace ProjektDB.Models
         public Users GetUser(string username, string password, out string errormsg) 
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Users Where Username = @Username";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
@@ -97,7 +97,7 @@ namespace ProjektDB.Models
         public Boolean IsUsernameTaken(string username, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Users Where Username = @Username";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);

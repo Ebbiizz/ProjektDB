@@ -11,7 +11,7 @@ namespace ProjektDB.Models
             if (0 < startX && startX < 11 && 0 < startY && startY < 11 && 0 < endX && endX < 11 && 0 < endX && endY < 11)
             {
                 SqlConnection sqlConnection = new SqlConnection();
-                sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
                 string sqlstring = "Insert Into Ships (BoardId, ShipType, StartX, StartY, EndX, EndY) Values (@BoardId, @ShipType, @StartX, @StartY, @EndX, @EndY)";
                 SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
                 sqlCommand.Parameters.Add("BoardId", System.Data.SqlDbType.Int).Value = boardId;
@@ -54,7 +54,7 @@ namespace ProjektDB.Models
         public List<Ships> GetShipsOnBoard(int boardId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Ships Where BoardId = @BoardId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("BoardId", System.Data.SqlDbType.Int).Value = boardId;
