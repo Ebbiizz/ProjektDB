@@ -271,5 +271,39 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
+        public bool SetWinner(int gameId, int userId, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string sqlstring = "UPDATE Games SET WinnerId = @WinnerId WHERE Id = @GameId";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("WinnerId", System.Data.SqlDbType.Int).Value = userId;
+            sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
+            try
+            {
+                sqlConnection.Open();
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+
+                if (rowsAffected == 1)
+                {
+                    errormsg = "";
+                    return true;
+                }
+                else
+                {
+                    errormsg = "No rows were updated.";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                errormsg = ex.Message;
+                return false;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }

@@ -160,8 +160,15 @@ namespace ProjektDB.Controllers
                 return Json(new { success = false, message = error });
             }
             //ändrat till från gameId till userId då det bara är den som just sköt som kan ha vunnit
-
+            BoardsMethods boardsMethods = new BoardsMethods();
+            GamesMethods gamesMethods = new GamesMethods();
             bool gameOver = shotsMethods.CheckIfGameOver(userId, out error);
+            if (gameOver == true)
+            {
+                bool win = gamesMethods.SetWinner(gameId, userId, out error);
+                int i = shotsMethods.ClearShots(userId, out error);
+                int j = boardsMethods.RemoveBoard(userId, out error);
+            }
 
             _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
 
