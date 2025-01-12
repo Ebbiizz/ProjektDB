@@ -149,25 +149,27 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            string sqlstring = "Update Games SET Player2Id = @Player2Id Where GameId = @GameId";
+            string sqlstring = "UPDATE Games SET Player2Id = @Player2Id, Status = @Status WHERE Id = @GameId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("Player2Id", System.Data.SqlDbType.Int).Value = userId;
             sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
+            sqlCommand.Parameters.Add("Status", System.Data.SqlDbType.NVarChar).Value = Status.Active.ToString();
 
             try
             {
                 sqlConnection.Open();
-                int i = 0;
-                i = sqlCommand.ExecuteNonQuery();
-                if (i == 1)
+                int rowsAffected = sqlCommand.ExecuteNonQuery();
+
+                if (rowsAffected == 1)
                 {
                     errormsg = "";
+                    return true;
                 }
                 else
                 {
-                    errormsg = "Update command failed";
+                    errormsg = "No rows were updated.";
+                    return false;
                 }
-                return true;
             }
             catch (Exception ex)
             {

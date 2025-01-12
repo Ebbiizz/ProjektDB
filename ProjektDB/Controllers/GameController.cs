@@ -75,16 +75,17 @@ namespace ProjektDB.Controllers
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             
             GamesMethods gamesMethods = new GamesMethods();
-            //Kommer som en lista lättast att använda i en egen funktion?
-            List<Games> availableGamesList = gamesMethods.GetAvailableGame(out string error); // GetAvailableGames = hämta ett spel som är waiting och väntar på en spelare som ska joina.
+            List<Games> availableGamesList = gamesMethods.GetAvailableGame(out string error);
+            Random random = new Random();
+            Games randomGame = availableGamesList[random.Next(availableGamesList.Count)];
 
             if (availableGamesList == null)
             {
                 ViewBag.ErrorMessage = "Inga tillgängliga spel.";
                 return View("Lobby");
             }
-            //Hämta id in i funktionen
-            bool success = gamesMethods.JoinGame(gameId, userId, out error); // JoinGame = Lägg till spelaren i tabellen kopplat till spelet och ändra status till active
+
+            bool success = gamesMethods.JoinGame(randomGame.Id, userId, out error);
 
             if (!success)
             {
