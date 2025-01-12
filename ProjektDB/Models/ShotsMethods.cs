@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Org.BouncyCastle.Asn1.Cmp;
 using Org.BouncyCastle.Bcpg;
+using System.Data;
 
 namespace ProjektDB.Models
 {
@@ -81,6 +82,70 @@ namespace ProjektDB.Models
             {
                 errormsg = "invalid values";
                 return false;
+            }
+        }
+        public bool CheckIfGameOver(int userId, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string sqlstring = "Select Count(*) From Shots Where ShooterId = @ShooterId and hit = 'true'";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("ShooterId", System.Data.SqlDbType.Int).Value = userId;
+            try
+            {
+                sqlConnection.Open();
+                int successfulShots = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                if (successfulShots == 17)
+                {
+                    errormsg = "";
+                    return true;
+                }
+                else
+                {
+                    errormsg = "";
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+        public int ClearShots(int userId, out string errormsg) 
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab2U1;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            string sqlstring = "Delete From Shots Where userId = @userId";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;
+            try
+            {
+                sqlConnection.Open();
+                int i = 0;
+                i = sqlCommand.ExecuteNonQuery();
+                if (i == 1)
+                {
+                    errormsg = "";
+                }
+                else
+                {
+                    errormsg = "Remove command failed";
+                }
+                return i;
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally
+            {
+                sqlConnection.Close();
             }
         }
     }

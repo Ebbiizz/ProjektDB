@@ -159,8 +159,9 @@ namespace ProjektDB.Controllers
             {
                 return Json(new { success = false, message = error });
             }
+            //ändrat till från gameId till userId då det bara är den som just sköt som kan ha vunnit
 
-            bool gameOver = shotsMethods.CheckIfGameOver(gameId, out error);
+            bool gameOver = shotsMethods.CheckIfGameOver(userId, out error);
 
             _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
 
