@@ -52,7 +52,7 @@ namespace ProjektDB.Controllers
 
             GamesMethods gamesMethods = new GamesMethods();
 
-            bool success = gamesMethods.CreateNewGame(userId, out string error); //Ska brädet initialiseras här eller ska det hanteras på eget sätt?
+            bool success = gamesMethods.CreateNewGame(userId, out string error); 
 
             if (!success)
             {
@@ -60,7 +60,17 @@ namespace ProjektDB.Controllers
                 return View("Lobby"); 
             }
 
-            return RedirectToAction("Game"); // omdirigera till spelet
+            // Skapar bräde
+            BoardsMethods boardMethods = new BoardsMethods();
+            bool boardCreated = boardMethods.CreateBoard(gamesMethods.RecentGameId, userId, out string boardError); //skapa en metod som hämtar senast skapat game-id.
+
+            if (!boardCreated)
+            {
+                ViewBag.ErrorMessage = "Brädet kunde inte skapas: " + boardError;
+                return View("Lobby");
+            }
+
+            return RedirectToAction("Game", new { gameId = gamesMethods.RecentGameId });
         }
 
 
@@ -95,7 +105,7 @@ namespace ProjektDB.Controllers
 
             _hubContext.Clients.Group(gameId.ToString()).SendAsync("PlayerJoined", userId);
 
-            return RedirectToAction("Game", new { gameId = gameId });
+            return RedirectToAction("Game", new { gameId = randomGame.Id });
         }
 
         [HttpPost]
@@ -105,7 +115,7 @@ namespace ProjektDB.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
-            //Skapa ett brädde fixar en CreateBoard metod i BoardsMethods
+
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
             ShipsMethods shipsMethods = new ShipsMethods();
