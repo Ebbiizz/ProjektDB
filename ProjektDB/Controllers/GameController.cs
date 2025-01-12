@@ -62,7 +62,10 @@ namespace ProjektDB.Controllers
 
             // Skapar bräde
             BoardsMethods boardMethods = new BoardsMethods();
-            bool boardCreated = boardMethods.CreateBoard(gamesMethods.RecentGameId, userId, out string boardError); //skapa en metod som hämtar senast skapat game-id.
+            int recentGameId = gamesMethods.GetRecentGameId(out string errormsg);
+
+
+            bool boardCreated = boardMethods.CreateBoard(recentGameId, userId, out string boardError); //skapa en metod som hämtar senast skapat game-id.
 
             if (!boardCreated)
             {
@@ -70,7 +73,7 @@ namespace ProjektDB.Controllers
                 return View("Lobby");
             }
 
-            return RedirectToAction("Game", new { gameId = gamesMethods.RecentGameId });
+            return RedirectToAction("Game", new { gameId = recentGameId });
         }
 
 

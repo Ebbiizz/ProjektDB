@@ -232,5 +232,44 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
+
+        public int GetRecentGameId(out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            string sqlstring = "SELECT TOP 1 GameId FROM Games ORDER BY CreatedAt DESC";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+
+            try
+            {
+                sqlConnection.Open();
+                adapter.Fill(dataSet, "Games");
+
+                int count = dataSet.Tables["Games"].Rows.Count;
+                if (count > 0)
+                {
+                    int recentGameId = Convert.ToInt32(dataSet.Tables["Games"].Rows[0]["GameId"]);
+                    errormsg = "";
+                    return recentGameId;
+                }
+                else
+                {
+                    errormsg = "No games found";
+                    return -1;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return -1;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }
