@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace ProjektDB.Models
 {
@@ -52,7 +53,55 @@ namespace ProjektDB.Models
         }
         public List<Ships> GetShipsOnBoard(int boardId, out string errormsg)
         {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=tcp:sankaskepp.database.windows.net,1433;Initial Catalog=SankaSkepp;Persist Security Info=False;User ID=skeppadmin;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            string sqlstring = "Select * From Ships Where BoardId = @BoardId";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("BoardId", System.Data.SqlDbType.Int).Value = boardId;
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+            List<Ships> shipsList = new List<Ships>();
+            try
+            {
+                sqlConnection.Open();
+                adapter.Fill(dataSet, "Ships");
+                int i = 0;
+                int count = 0;
+                count = dataSet.Tables["Ships"].Rows.Count;
+                if (count > 0)
+                {
+                    while (i < count)
+                    {
+                        Ships ship = new Ships();
+                        ship.Id = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["Id"]);
+                        ship.BoardId = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["BoardId"]);
+                        ship.Type = (ShipType)Enum.Parse(typeof(ShipType), dataSet.Tables["Ships"].Rows[i]["Type"].ToString());
+                        ship.StartX = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["StartX"]);
+                        ship.StartY = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["StartY"]);
+                        ship.EndX = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["EndX"]);
+                        ship.EndY = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["EndY"]);
 
+                        i++;
+                        shipsList.Add(ship);
+                    }
+                    errormsg = "";
+                    return shipsList;
+                }
+                else
+                {
+                    errormsg = "No active games are fetched";
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return null;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
         }
     }
 }
