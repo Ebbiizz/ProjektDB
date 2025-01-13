@@ -78,7 +78,7 @@ namespace ProjektDB.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult JoinGame(int gameId)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
@@ -110,6 +110,11 @@ namespace ProjektDB.Controllers
             _hubContext.Clients.Group(gameId.ToString()).SendAsync("PlayerJoined", userId);
 
             return RedirectToAction("Game", new { gameId = randomGame.Id });
+        }
+
+        public IActionResult Game(int gameId)
+        {
+            return View();
         }
 
         [HttpPost]
