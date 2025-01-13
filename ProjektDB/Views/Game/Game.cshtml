@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Sänka Skepp";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,14 +7,18 @@
 <link rel="stylesheet" href="~/css/game.css" />
 
 <div class="game-container">
-    <div class="player-board">
+    <div class="playerBoard">
         <h3>Ditt bräde</h3>
-        <div id="playerBoard" class="board"></div>
-        <button id="placeShipsBtn" class="btn">Placera Skepp</button>
+        <div id="player-board" class="board"></div>
+        <div class="placement-controls">
+            <label for="coordinates">Ange koordinater:</label>
+            <input type="text" id="coordinates" placeholder="Ex: 1,1-1,5" />
+            <button id="placeShipManualBtn" class="btn">Placera Skepp</button>
+        </div>
     </div>
-    <div class="opponent-board">
+    <div class="opponentBoard">
         <h3>Motståndarens bräde</h3>
-        <div id="opponentBoard" class="board"></div>
+        <div id="opponent-board" class="board"></div>
         <button id="fireShotBtn" class="btn">Skjut!</button>
     </div>
 </div>

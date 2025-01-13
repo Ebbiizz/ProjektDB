@@ -6,6 +6,37 @@ namespace ProjektDB.Hubs
 {
     public class GameHub : Hub
     {
+        public override async Task OnConnectedAsync()
+        {
+            var gameId = Context.GetHttpContext().Request.Query["gameId"];
+            try
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
+            }
+            catch (Exception ex)
+            {
+                // Logga felet
+                Console.WriteLine($"Fel vid inlämning till grupp: {ex.Message}");
+            }
+            await base.OnConnectedAsync();
+        }
+
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            var gameId = Context.GetHttpContext().Request.Query["gameId"];
+            try
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, gameId);
+            }
+            catch (Exception ex)
+            {
+                // Logga felet
+                Console.WriteLine($"Fel vid borttagning från grupp: {ex.Message}");
+            }
+            await base.OnDisconnectedAsync(exception);
+        }
+
         public async Task SendMessage(string user, string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", user, message);
