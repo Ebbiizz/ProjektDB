@@ -118,7 +118,7 @@ namespace ProjektDB.Controllers
         }
 
         [HttpPost]
-        public IActionResult PlaceShip(int gameId, int startX, int startY, int endX, int endY, ShipType shipType)
+        public IActionResult PlaceShip(Ships ship, int gameId)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
             {

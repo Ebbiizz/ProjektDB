@@ -2,6 +2,7 @@
     ViewData["Title"] = "Sänka Skepp";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model ProjektDB.Models.Ships
 
 <link rel="stylesheet" href="~/css/game.css" />
 
@@ -10,6 +11,20 @@
         <h3>Ditt bräde</h3>
         <div id="playerBoard" class="board"></div>
         <button id="placeShipsBtn" class="btn">Placera Skepp</button>
+        <form asp-action="PlaceShip">
+            <input hidden class="form-control" type="int" placeholder="0" asp-for="Id" />
+            <lable class="mt-4">ShipType</lable>
+            <input class="form-control" type="text" placeholder="Type" asp-for="Type" />
+            <lable class="mt-4">StartX</lable>
+            <input class="form-control" type="int" placeholder="0" asp-for="StartX" />
+            <lable class="mt-4">StartY</lable>
+            <input class="form-control" type="int" placeholder="0" asp-for="StartY" />
+            <lable class="mt-4">EndX</lable>
+            <input class="form-control" type="int" placeholder="0" asp-for="EndX" />
+            <lable class="mt-4">EndY</lable>
+            <input class="form-control" type="int" placeholder="0" asp-for="EndY" />
+            <button class="btn btn-primary mt-4" type="submit">Ok</button>
+        </form>
     </div>
     <div class="opponent-board">
         <h3>Motståndarens bräde</h3>
