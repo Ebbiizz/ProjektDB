@@ -65,7 +65,7 @@ namespace ProjektDB.Models
             string sqlstring = "Insert Into Games (Player1Id, CreatedAt, Status) Values (@Player1Id, @CreatedAt, @Status)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("Player1Id", System.Data.SqlDbType.Int).Value = userId;
-            sqlCommand.Parameters.Add("CreatedAt", System.Data.SqlDbType.Date).Value = DateTime.Now;
+            sqlCommand.Parameters.Add("CreatedAt", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
             sqlCommand.Parameters.Add("Status", System.Data.SqlDbType.NVarChar).Value = "Waiting";
 
             try
