@@ -49,8 +49,8 @@ namespace ProjektDB.Models
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id=sqlserver;Password=Databas123;Encrypt=True;TrustServerCertificate=True;";
             string sqlstring = "SELECT * FROM Boards WHERE GameId = @GameId AND UserId = @UserId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@GameId", gameId);
-            sqlCommand.Parameters.AddWithValue("@UserId", userId);
+            sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
+            sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;
 
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
