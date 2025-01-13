@@ -8,7 +8,7 @@
         public int ShooterId { get; set; }
         public int TargetX { get; set; }
         public int TargetY {  get; set; }
-        public Boolean Hit {  get; set; }
+        public bool Hit {  get; set; }
         public DateTime ShotTime { get; set; }
     }
 }

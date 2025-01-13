@@ -34,8 +34,12 @@ namespace ProjektDB.Hubs
             });
         }
 
-        public async Task FireShot(int gameId, int userId, int targetX, int targetY, bool hit, bool gameOver)
+        public async Task FireShot(int gameId, int userId, int targetX, int targetY)
         {
+            // Här kan vi implementera logik för att avgöra om skottet träffade
+            bool hit = CheckIfHit(targetX, targetY);
+            bool gameOver = CheckIfGameOver(gameId);
+
             await Clients.Group(gameId.ToString()).SendAsync("ShotFired", new
             {
                 userId,
@@ -75,6 +79,19 @@ namespace ProjektDB.Hubs
                 MatchesLost = userStats.MatchesLost,
                 WinPercentage = userStats.WinPercentage
             });
+        }
+
+        // Hjälpmetoder för att kontrollera om skottet träffade eller om spelet är över
+        private bool CheckIfHit(int targetX, int targetY)
+        {
+            // Här kan du implementera logik för att avgöra om skottet träffade
+            return false;
+        }
+
+        private bool CheckIfGameOver(int gameId)
+        {
+            // Här kan du implementera logik för att avgöra om spelet är över
+            return false;
         }
     }
 }

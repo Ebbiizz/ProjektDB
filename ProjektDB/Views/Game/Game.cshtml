@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Sänka Skepp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/game.css" />
+
+<div class="game-container">
+    <div class="player-board">
+        <h3>Ditt bräde</h3>
+        <div id="playerBoard" class="board"></div>
+        <button id="placeShipsBtn" class="btn">Placera Skepp</button>
+    </div>
+    <div class="opponent-board">
+        <h3>Motståndarens bräde</h3>
+        <div id="opponentBoard" class="board"></div>
+        <button id="fireShotBtn" class="btn">Skjut!</button>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.9/signalr.min.js"></script>
+<script src="~/js/gameHub.js"></script>
