@@ -118,7 +118,7 @@ namespace ProjektDB.Controllers
         }
 
         [HttpPost]
-        public IActionResult PlaceShip(int gameId, int startX, int startY, int endX, int endY, ShipType shipType)
+        public IActionResult PlaceShip(int gameId, int startX, int startY, int endX, int endY, string shipType)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
             {
@@ -131,7 +131,12 @@ namespace ProjektDB.Controllers
             BoardsMethods boardMethods = new BoardsMethods();
             Boards board = boardMethods.GetBoard(gameId, userId, out string errormsg);
 
-            bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, shipType, out string error);
+            if (!Enum.TryParse(shipType, out ShipType parsedShipType))
+            {
+                return Json(new { success = false, message = "Ogiltig skeppstyp." });
+            }
+
+            bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, parsedShipType, out string error);
             //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
 
 

@@ -12,10 +12,10 @@ namespace ProjektDB.Models
             {
                 SqlConnection sqlConnection = new SqlConnection();
                 sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-                string sqlstring = "Insert Into Ships (BoardId, ShipType, StartX, StartY, EndX, EndY) Values (@BoardId, @ShipType, @StartX, @StartY, @EndX, @EndY)";
+                string sqlstring = "Insert Into Ships (BoardId, Type, StartX, StartY, EndX, EndY) Values (@BoardId, @Type, @StartX, @StartY, @EndX, @EndY)";
                 SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
                 sqlCommand.Parameters.Add("BoardId", System.Data.SqlDbType.Int).Value = boardId;
-                sqlCommand.Parameters.Add("ShipType", System.Data.SqlDbType.NVarChar).Value = shipType;
+                sqlCommand.Parameters.Add("Type", System.Data.SqlDbType.NVarChar).Value = shipType.ToString();
                 sqlCommand.Parameters.Add("StartX", System.Data.SqlDbType.Int).Value = startX;
                 sqlCommand.Parameters.Add("StartY", System.Data.SqlDbType.Int).Value = startY;
                 sqlCommand.Parameters.Add("EndX", System.Data.SqlDbType.Int).Value = endX;
