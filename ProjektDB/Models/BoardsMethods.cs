@@ -64,7 +64,7 @@ namespace ProjektDB.Models
                 // Kontrollera om det finns några rader innan du hämtar data
                 if (dataSet.Tables["Board"].Rows.Count > 0)
                 {
-                    board.Id = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["Id"]);
+                    board.Id = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["BoardID"]);
                     board.GameId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["GameId"]);
                     board.UserId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["UserId"]);
                     board.SizeX = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["SizeX"]);
