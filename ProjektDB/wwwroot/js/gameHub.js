@@ -14,7 +14,7 @@ connection.on("ReceiveMessage", (user, message) => {
     //behövs denna?
 });
 
-function joinGame(gameId) {
+function PlayerJoined(gameId) {
     connection.invoke("JoinGame", gameId)
         .then(() => {
             console.log(`Gick med i spelet med ID ${gameId}`);
@@ -22,7 +22,7 @@ function joinGame(gameId) {
         .catch(err => console.error("Fel vid att gå med i spelet:", err));
         //annan UI-förändring?
 }
-function leaveGame(gameId) {
+function LeaveGame(gameId) {
     connection.invoke("LeaveGame", gameId)
         .then(() => {
             console.log(`Lämnade spelet med ID ${gameId}`);
@@ -31,11 +31,13 @@ function leaveGame(gameId) {
         //annan UI-förändring?
 }
 
-function updateStatisticsView(stats) {
+function StatisticsUpdate(stats) {
     document.querySelector("#matchesPlayed").innerText = stats.MatchesPlayed;
     document.querySelector("#matchesWon").innerText = stats.MatchesWon;
     document.querySelector("#matchesLost").innerText = stats.MatchesLost;
     document.querySelector("#winPercentage").innerText = `${stats.WinPercentage}%`;
 }
+//FireShot
+//ShipPlaced
 
 //allt som finns i hubben måste synkas med js för att göra visuella förändringar/bekräftelser eller kunna samarbeta med spelaren.
