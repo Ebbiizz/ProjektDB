@@ -11,7 +11,7 @@ namespace ProjektDB.Models
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
 
-            string sqlstring = "Insert Into Users (Username, PasswordHash) Values (@Username, @Password)";
+            string sqlstring = "Insert Into Users (Username, Password) Values (@Username, @Password)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("Username", System.Data.SqlDbType.NVarChar, 50).Value = user.Username;
             sqlCommand.Parameters.Add("Password", System.Data.SqlDbType.NVarChar, 50).Value = user.Password;
