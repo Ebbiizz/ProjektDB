@@ -173,10 +173,30 @@ const shipLengths = {
     Destroyer: 2
 };
 
-let currentShipType = "Carrier"; // Starta med Carrier som standard
+
+function determineShipType(startX, startY, endX, endY) {
+    let shipLength;
+
+    if (startX === endX) {
+        shipLength = Math.abs(endY - startY) + 1;
+    } else if (startY === endY) {
+        shipLength = Math.abs(endX - startX) + 1;
+    } else {
+        return null;
+    }
+
+    for (const shipType in shipLengths) {
+        if (shipLengths[shipType] === shipLength) {
+            return shipType;
+        }
+    }
+
+    return null;
+}
+
+let currentShipType = "Carrier";
 
 function validateAndPlaceShip(startX, startY, endX, endY, shipType) {
-    // Kontrollera skeppslängd och gränser
     const length = shipLengths[shipType];
     const isHorizontal = startX === endX;
     const isVertical = startY === endY;
@@ -196,9 +216,8 @@ function validateAndPlaceShip(startX, startY, endX, endY, shipType) {
 }
 
 document.getElementById("placeShipManualBtn").addEventListener("click", async () => {
-    // Hämta gameId från URL-parameter
     const urlParams = new URLSearchParams(window.location.search);
-    const gameId = urlParams.get('gameId');  // Hämta gameId från querystring
+    const gameId = urlParams.get('gameId');
 
     if (!gameId) {
         alert("Game ID saknas i URL.");
@@ -215,24 +234,25 @@ document.getElementById("placeShipManualBtn").addEventListener("click", async ()
 
     const [_, startX, startY, endX, endY] = match.map(Number);
 
-    if (!validateAndPlaceShip(startX, startY, endX, endY, currentShipType)) return;
+    const shipType = determineShipType(startX, startY, endX, endY);
+    if (!shipType) {
+        alert("Ogiltig skeppstyp baserat på dessa koordinater.");
+        return;
+    }
 
-    console.log("Sending to server:", { gameId, startX, startY, endX, endY, shipType: currentShipType });
+    if (!validateAndPlaceShip(startX, startY, endX, endY, shipType)) return;
 
-    /*const response = await fetch("/Game/PlaceShip", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gameId: gameId, startX, startY, endX, endY, shipType: currentShipType })
-    });*/
+    console.log("Sending to server:", { gameId, startX, startY, endX, endY, shipType });
+
     const response = await fetch("/Game/PlaceShip", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `gameId=${gameId}&startX=${startX}&startY=${startY}&endX=${endX}&endY=${endY}&shipType=${currentShipType}`
+        body: `gameId=${gameId}&startX=${startX}&startY=${startY}&endX=${endX}&endY=${endY}&shipType=${shipType}`
     });
 
     const result = await response.json();
     if (result.success) {
-        alert(`${currentShipType} placerades framgångsrikt!`);
+        alert(`${shipType} placerades framgångsrikt!`);
         for (let x = startX; x <= endX; x++) {
             for (let y = startY; y <= endY; y++) {
                 const cell = document.querySelector(`.board-cell[data-x="${x}"][data-y="${y}"]`);
@@ -244,7 +264,6 @@ document.getElementById("placeShipManualBtn").addEventListener("click", async ()
     }
 });
 
-
 connection.on("ShipPlaced", ({ startX, startY, endX, endY, shipType }) => {
     for (let x = startX; x <= endX; x++) {
         for (let y = startY; y <= endY; y++) {
@@ -253,4 +272,3 @@ connection.on("ShipPlaced", ({ startX, startY, endX, endY, shipType }) => {
         }
     }
 });
-
