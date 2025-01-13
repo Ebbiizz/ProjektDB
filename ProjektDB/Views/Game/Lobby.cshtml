@@ -1,4 +1,4 @@
-﻿@model List<ProjektDB.Models>
+﻿@model IEnumerable<ProjektDB.Models.Games>
 
 <h1>Lobby</h1>
 
@@ -14,4 +14,60 @@
 
 <button onclick="location.href='@Url.Action("CreateGame", "Game")'" class="btn btn-primary">Skapa nytt spel</button>
 <button onclick="location.href='@Url.Action("JoinGame", "Game")'" class="btn btn-primary">Joina ett spel</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player1Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Player2Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentTurn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WinnerId)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Player1Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Player2Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CurrentTurn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WinnerId)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
