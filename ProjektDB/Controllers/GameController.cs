@@ -41,7 +41,7 @@ namespace ProjektDB.Controllers
             return View(activeGames);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult CreateGame()
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
