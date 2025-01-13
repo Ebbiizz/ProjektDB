@@ -177,7 +177,7 @@ namespace ProjektDB.Controllers
             ShipsMethods shipsMethods = new ShipsMethods();
             List<Ships> shipsOnOpponentsBoard = shipsMethods.GetShipsOnBoard(board.Id, out errormsg);
 
-            if (shipsOnOpponentsBoard != null)
+            if (shipsOnOpponentsBoard.Count == 5)
             {
 
                 ShotsMethods shotsMethods = new ShotsMethods();
