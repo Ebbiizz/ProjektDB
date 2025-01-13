@@ -95,7 +95,7 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
-        public bool IsUsernameTaken(string username, out string errormsg)
+        /*public bool IsUsernameTaken(string username, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
@@ -150,6 +150,58 @@ namespace ProjektDB.Models
             }
             finally
             {
+                sqlConnection.Close();
+            }
+        }*/
+        public bool IsUsernameTaken(string username, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
+
+            // SQL-fråga som kollar om det finns en användare med det här användarnamnet
+            string sqlstring = "Select * From Users Where Username = @Username";
+
+            // Skapa en SQL-kommando med frågan och anslutning till databasen
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+
+            // Använd en parameter för att förhindra SQL-injektion (för att säkerställa att användarnamnet är säkert att använda)
+            sqlCommand.Parameters.AddWithValue("@Username", username);
+
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+
+            try
+            {
+                // Öppna anslutningen till databasen
+                sqlConnection.Open();
+
+                // Fyll dataset med resultat från frågan
+                adapter.Fill(dataSet, "Users");
+
+                // Kolla om vi har några resultat (användare) i databasen
+                int count = dataSet.Tables["Users"].Rows.Count;
+
+                // Om vi hittar någon användare med det angivna användarnamnet
+                if (count > 0)
+                {
+                    errormsg = "";  // Ingen felmeddelande behövs, eftersom användarnamnet är upptaget
+                    return true;  // Användarnamnet är upptaget
+                }
+                else
+                {
+                    errormsg = "";  // Ingen felmeddelande behövs, eftersom användarnamnet är ledigt
+                    return false;  // Användarnamnet är ledigt
+                }
+            }
+            catch (Exception e)
+            {
+                // Om något går fel (t.ex. anslutning till databasen), sätt felmeddelandet
+                errormsg = e.Message;
+                return false;  // Användarnamnet kan inte kontrolleras på grund av fel
+            }
+            finally
+            {
+                // Stäng anslutningen till databasen
                 sqlConnection.Close();
             }
         }
