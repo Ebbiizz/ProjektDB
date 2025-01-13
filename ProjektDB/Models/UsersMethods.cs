@@ -47,6 +47,7 @@ namespace ProjektDB.Models
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Users Where Username = @Username";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            sqlCommand.Parameters.Add("Username", System.Data.SqlDbType.NVarChar).Value = username;
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
             Users searchedUser = new Users();
@@ -64,7 +65,7 @@ namespace ProjektDB.Models
                         Users foundUser = new Users();
                         foundUser.Id = Convert.ToUInt16(dataSet.Tables["Users"].Rows[i]["UserID"]);
                         foundUser.Username = dataSet.Tables["Users"].Rows[i]["Username"].ToString();
-                        foundUser.Password = dataSet.Tables["Users"].Rows[i]["Username"].ToString();
+                        foundUser.Password = dataSet.Tables["Users"].Rows[i]["PasswordHash"].ToString();
                         if (foundUser.Username == username)
                         {
                             if (foundUser.Password == password)
