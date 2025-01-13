@@ -43,42 +43,39 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
-        public Boards GetBoard(int gameId,int userId, out string errormsg)
+        public Boards GetBoard(int gameId, int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
-            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-            string sqlstring = "Select * From Boards Where GameId = @GameId and UserId = @UserId";
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id=sqlserver;Password=Databas123;Encrypt=True;TrustServerCertificate=True;";
+            string sqlstring = "SELECT * FROM Boards WHERE GameId = @GameId AND UserId = @UserId";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
-            sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
-            sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;
+            sqlCommand.Parameters.AddWithValue("@GameId", gameId);
+            sqlCommand.Parameters.AddWithValue("@UserId", userId);
+
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
             Boards board = new Boards();
+
             try
             {
                 sqlConnection.Open();
                 adapter.Fill(dataSet, "Board");
-                int i = 0;
-                int count = 0;
-                count = dataSet.Tables["Board"].Rows.Count;
-                if (count > 0)
-                {
-                    while (i < count)
-                    {
-                        board.Id = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["Id"]);
-                        board.GameId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["GameId"]);
-                        board.UserId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["UserId"]);
-                        board.SizeX = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["SizeX"]);
-                        board.SizeY = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["SizeY"]);
 
-                        i++;
-                    }
+                // Kontrollera om det finns några rader innan du hämtar data
+                if (dataSet.Tables["Board"].Rows.Count > 0)
+                {
+                    board.Id = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["Id"]);
+                    board.GameId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["GameId"]);
+                    board.UserId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["UserId"]);
+                    board.SizeX = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["SizeX"]);
+                    board.SizeY = Convert.ToUInt16(dataSet.Tables["Board"].Rows[0]["SizeY"]);
+
                     errormsg = "";
                     return board;
                 }
                 else
                 {
-                    errormsg = "No active games are fetched";
+                    errormsg = "No data found.";
                     return null;
                 }
             }
