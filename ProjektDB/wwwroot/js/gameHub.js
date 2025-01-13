@@ -31,4 +31,11 @@ function leaveGame(gameId) {
         //annan UI-förändring?
 }
 
+function updateStatisticsView(stats) {
+    document.querySelector("#matchesPlayed").innerText = stats.MatchesPlayed;
+    document.querySelector("#matchesWon").innerText = stats.MatchesWon;
+    document.querySelector("#matchesLost").innerText = stats.MatchesLost;
+    document.querySelector("#winPercentage").innerText = `${stats.WinPercentage}%`;
+}
+
 //allt som finns i hubben måste synkas med js för att göra visuella förändringar/bekräftelser eller kunna samarbeta med spelaren.

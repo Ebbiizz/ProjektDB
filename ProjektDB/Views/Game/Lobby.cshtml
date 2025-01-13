@@ -1,4 +1,4 @@
-﻿@model List<ProjektDB.Models.Games>
+﻿@model List<ProjektDB.Models>
 
 <h1>Lobby</h1>
 
@@ -7,4 +7,11 @@
     <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
 
+<div id="matchesPlayed"></div>
+<div id="matchesWon"></div>
+<div id="matchesLost"></div>
+<div id="winPercentage"></div>
+
 <button onclick="location.href='@Url.Action("CreateGame", "Game")'" class="btn btn-primary">Skapa nytt spel</button>
+<button onclick="location.href='@Url.Action("JoinGame", "Game")'" class="btn btn-primary">Joina ett spel</button>
+

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using ProjektDB.Models;
 using System.Threading.Tasks;
 
 namespace ProjektDB.Hubs
@@ -48,6 +49,32 @@ namespace ProjektDB.Hubs
         public async Task PlayerJoined(int gameId, int userId)
         {
             await Clients.Group(gameId.ToString()).SendAsync("PlayerJoined", userId);
+        }
+
+        public async Task StatisticsUpdated(int userId)
+        {
+            StatisticsMethods statisticsMethods = new StatisticsMethods();
+            var userStats = statisticsMethods.GetUserStatistics(userId, out string error);
+
+            if (error != null)
+            {
+                await Clients.User(userId.ToString()).SendAsync("StatisticsUpdated", new
+                {
+                    MatchesPlayed = 0,
+                    MatchesWon = 0,
+                    MatchesLost = 0,
+                    WinPercentage = 0.0
+                });
+                return;
+            }
+
+            await Clients.User(userId.ToString()).SendAsync("StatisticsUpdated", new
+            {
+                MatchesPlayed = userStats.MatchesPlayed,
+                MatchesWon = userStats.MatchesWon,
+                MatchesLost = userStats.MatchesLost,
+                WinPercentage = userStats.WinPercentage
+            });
         }
     }
 }
