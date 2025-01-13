@@ -68,6 +68,25 @@ function PlaceShip(gameId, startX, startY, endX, endY, shipType) {
 }
 
 // Visuella uppdateringar
+
+function initializeBoard(boardId) {
+    const board = document.getElementById(boardId);
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            const cell = document.createElement('div');
+            cell.classList.add('board-cell');
+            cell.dataset.x = i;
+            cell.dataset.y = j;
+            board.appendChild(cell);
+        }
+    }
+}
+
+window.onload = () => {
+    initializeBoard('playerBoard');
+    initializeBoard('opponentBoard');
+};
+
 function updateBoard(userId, startX, startY, endX, endY, shipType) {
     const boardId = userId === 1 ? 'playerBoard' : 'opponentBoard'; // Antag att 1 är spelaren, och 2 är motståndaren
     const board = document.getElementById(boardId);

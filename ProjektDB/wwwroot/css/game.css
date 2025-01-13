@@ -1,11 +1,17 @@
 ﻿/* Definiera grundlayouten för brädet */
 .board {
     display: grid;
-    grid-template-columns: repeat(10, 50px); /* 10 kolumner */
-    grid-template-rows: repeat(10, 50px); /* 10 rader */
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
     gap: 1px;
-    position: relative;
 }
+
+.board-cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+}
+
 
 /* Placering av skepp */
 .ship {
