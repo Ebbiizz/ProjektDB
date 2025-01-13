@@ -122,7 +122,11 @@ window.onload = () => {
     board.appendChild(ship);
 }*/
 function updateBoard(userId, startX, startY, endX, endY, shipType) {
-    const board = document.getElementById("player-board");
+    // Kontrollera om det är spelarens egna bräde (userId är 1 för spelaren)
+    const boardId = userId === 1 ? "player-board" : null;
+    if (!boardId) return; // Om det inte är spelarens bräde, gör inget
+
+    const board = document.getElementById(boardId);
 
     // Markera cellerna där skeppet är placerat
     const isHorizontal = startY === endY;
@@ -134,10 +138,12 @@ function updateBoard(userId, startX, startY, endX, endY, shipType) {
 
         const cell = board.querySelector(`[data-x="${x}"][data-y="${y}"]`);
         if (cell) {
-            cell.style.backgroundColor = "blue"; // Markera cellen för skeppet
+            cell.classList.add("ship"); // Lägg till klassen 'ship' för att markera cellen
         }
     }
 }
+
+
 
 
 /*function updateShotResult(userId, targetX, targetY, hit) {
@@ -264,11 +270,8 @@ document.getElementById("placeShipManualBtn").addEventListener("click", async ()
     }
 });
 
-connection.on("ShipPlaced", ({ startX, startY, endX, endY, shipType }) => {
-    for (let x = startX; x <= endX; x++) {
-        for (let y = startY; y <= endY; y++) {
-            const cell = document.querySelector(`.board-cell[data-x="${x}"][data-y="${y}"]`);
-            if (cell) cell.classList.add("ship");
-        }
-    }
+connection.on("ShipPlaced", ({ userId, startX, startY, endX, endY, shipType }) => {
+    // Anropa updateBoard-funktionen för att uppdatera spelarens bräde
+    updateBoard(userId, startX, startY, endX, endY, shipType);
 });
+
