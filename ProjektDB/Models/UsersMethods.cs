@@ -95,7 +95,7 @@ namespace ProjektDB.Models
                 sqlConnection.Close();
             }
         }
-        public Boolean IsUsernameTaken(string username, out string errormsg)
+        public bool IsUsernameTaken(string username, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
