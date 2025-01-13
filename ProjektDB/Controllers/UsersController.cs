@@ -54,8 +54,9 @@ namespace ProjektDB.Controllers
             }
 
             UsersMethods usersMethods = new UsersMethods();
+            bool isUserNameTaken = usersMethods.IsUsernameTaken(user.Username, out string error);
 
-            if (usersMethods.IsUsernameTaken(user.Username, out string error))
+            if (isUserNameTaken == false)
             {
                 if (error.IsNullOrEmpty())
                 {
