@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Org.BouncyCastle.Asn1.Cmp;
 using ProjektDB.Hubs;
 using ProjektDB.Models;
 
@@ -149,32 +150,55 @@ namespace ProjektDB.Controllers
 
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
-            ShotsMethods shotsMethods = new ShotsMethods();
-
-            bool hit = shotsMethods.FireShot(gameId, userId, targetX, targetY, out string error);
-            // Validera om skottet är på en giltig position.
-            // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
-
-            if (!string.IsNullOrEmpty(error))
-            {
-                return Json(new { success = false, message = error });
-            }
-
-            //ändrat till från gameId till userId då det bara är den som just sköt som kan ha vunnit
-            bool gameOver = shotsMethods.CheckIfGameOver(userId, out error);
-
-            BoardsMethods boardsMethods = new BoardsMethods();
+            string errormsg = "";
             GamesMethods gamesMethods = new GamesMethods();
-            if (gameOver == true)
+            Games game = gamesMethods.GetGameById(gameId, out errormsg);
+            BoardsMethods boardsMethods = new BoardsMethods();
+            Boards board = new Boards();
+
+            if (userId == game.Player1Id)
             {
-                bool win = gamesMethods.SetWinner(gameId, userId, out error);
-                int i = shotsMethods.ClearShots(userId, out error);
-                int j = boardsMethods.RemoveBoard(userId, out error);
+                board = boardsMethods.GetBoard(gameId, game.Player2Id, out errormsg);
             }
+            else
+            {
+                board = boardsMethods.GetBoard(gameId, game.Player1Id, out errormsg);
+            };
+            ShipsMethods shipsMethods = new ShipsMethods();
+            List<Ships> shipsOnOpponentsBoard = shipsMethods.GetShipsOnBoard(board.Id, out errormsg);
 
-            _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
+            if (shipsOnOpponentsBoard != null)
+            {
 
-            return Json(new { success = true, hit, gameOver });
+                ShotsMethods shotsMethods = new ShotsMethods();
+
+                bool hit = shotsMethods.FireShot(gameId, userId, targetX, targetY, out string error);
+                // Validera om skottet är på en giltig position.
+                // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    return Json(new { success = false, message = error });
+                }
+
+                //ändrat till från gameId till userId då det bara är den som just sköt som kan ha vunnit
+                bool gameOver = shotsMethods.CheckIfGameOver(userId, out error);
+
+                if (gameOver == true)
+                {
+                    bool win = gamesMethods.SetWinner(gameId, userId, out error);
+                    int i = shotsMethods.ClearShots(userId, out error);
+                    int j = boardsMethods.RemoveBoard(userId, out error);
+                }
+
+                _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
+
+                return Json(new { success = true, hit, gameOver }); 
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IActionResult ResumeGame(int gameId) //Lagra gameID i vyn för ouppklarade games
