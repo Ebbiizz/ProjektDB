@@ -67,7 +67,7 @@ namespace ProjektDB.Models
                     {
                         board.Id = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["Id"]);
                         board.GameId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["GameId"]);
-                        board.UserId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["UserId"];
+                        board.UserId = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["UserId"]);
                         board.SizeX = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["SizeX"]);
                         board.SizeY = Convert.ToUInt16(dataSet.Tables["Board"].Rows[i]["SizeY"]);
 
