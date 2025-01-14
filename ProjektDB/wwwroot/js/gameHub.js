@@ -152,6 +152,75 @@ function updateBoard(userId, startX, startY, endX, endY, shipType) {
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+document.getElementById("fireShotBtn").addEventListener("click", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('gameId');
+
+    if (!gameId) {
+        alert("Game ID saknas i URL.");
+        return;
+    }
+
+    const coordinates = document.getElementById("coordinates").value.trim();
+    const match = coordinates.match(/^(\d+),(\d+)$/);
+
+    if (!match) {
+        alert("Felaktigt format. Ange koordinater som: 1,3");
+        return;
+    }
+
+    const [_, targetX, targetY] = match;
+    const x = Number(targetX);
+    const y = Number(targetY);
+
+    if ((x < 0 && x > 10) || (y < 0 && y > 10)) {
+        alert("Ogiltiga koordinater. Ange positiva värden.");
+        return;
+    }
+
+    console.log(`TargetX: ${x}, TargetY: ${y}`);
+
+
+    const response = await fetch("/Game/FireShot", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `gameId=${gameId}&targetX=${targetX}&targetY=${targetY}`
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        alert("Skott avfyrat!");
+    } else {
+        alert(result.message);
+    }
+});
+
+// Hantera signal från servern när ett skott avfyras
+connection.on("ShotFired", ({ userId, targetX, targetY, hit, gameOver }) => {
+    updateShotResult(userId, targetX, targetY, hit, gameOver);
+});
+
+function updateShotResult(userId, targetX, targetY, hit, gameOver) {
+    const boardId = "opponent-board";
+    const board = document.getElementById(boardId);
+
+    if (!board) {
+        console.error("Board kunde inte hittas för användar-ID:", userId);
+        return;
+    }
+
+    const cell = board.querySelector(`[data-x="${targetX}"][data-y="${targetY}"]`);
+    if (cell) {
+        cell.classList.add(hit ? "hit" : "miss");
+    }
+
+    if (gameOver) {
+        alert("Spelet är över!");
+    }
+}
+
+
 /*connection.on("ReceiveMessage", (user, message) => {
     console.log(`${user}: ${message}`);
 });

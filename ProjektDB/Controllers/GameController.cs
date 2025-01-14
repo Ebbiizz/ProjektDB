@@ -208,7 +208,7 @@ namespace ProjektDB.Controllers
                     bool win = gamesMethods.SetWinner(gameId, userId, out error);
                     int i = shotsMethods.ClearShots(userId, out error);
                     int j = boardsMethods.RemoveBoard(userId, out error);
-                }
+                } 
 
                 _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
 

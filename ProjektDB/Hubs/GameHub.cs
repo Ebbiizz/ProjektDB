@@ -65,14 +65,11 @@ namespace ProjektDB.Hubs
             });
         }
 
-        public async Task FireShot(int gameId, int userId, int targetX, int targetY)
+        public async Task FireShot(int gameId, int userId, int targetX, int targetY, bool hit, bool gameOver)
         {
-            // Här kan vi implementera logik för att avgöra om skottet träffade
-            bool hit = CheckIfHit(targetX, targetY);
-            bool gameOver = CheckIfGameOver(gameId);
-
             await Clients.Group(gameId.ToString()).SendAsync("ShotFired", new
             {
+                gameId,
                 userId,
                 targetX,
                 targetY,
@@ -80,6 +77,7 @@ namespace ProjektDB.Hubs
                 gameOver
             });
         }
+
 
         public async Task PlayerJoined(int gameId, int userId)
         {
