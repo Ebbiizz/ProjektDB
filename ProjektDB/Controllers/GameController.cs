@@ -79,7 +79,7 @@ namespace ProjektDB.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult JoinGame()
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
