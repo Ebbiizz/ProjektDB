@@ -88,7 +88,7 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id=sqlserver;Password=Databas123;Encrypt=True;TrustServerCertificate=True;";
-            string sqlstring = "SELECT TOP 1 Hit FROM Games ORDER BY CreatedAt DESC";
+            string sqlstring = "SELECT TOP 1 Hit FROM Games ORDER BY ShotTime DESC";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
