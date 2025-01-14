@@ -84,6 +84,43 @@ namespace ProjektDB.Models
                 return false;
             }
         }
+        public bool GetMostRecentHit(int gameId, int userId, out string errormsg)
+        {
+            SqlConnection sqlConnection = new SqlConnection();
+            sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id=sqlserver;Password=Databas123;Encrypt=True;TrustServerCertificate=True;";
+            string sqlstring = "SELECT TOP 1 Hit FROM Games ORDER BY CreatedAt DESC";
+            SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataSet dataSet = new DataSet();
+
+            try
+            {
+                sqlConnection.Open();
+                adapter.Fill(dataSet, "Shots");
+
+                int count = dataSet.Tables["Shots"].Rows.Count;
+                if (count > 0)
+                {
+                    bool recentHit = Convert.ToBoolean(dataSet.Tables["Shots"].Rows[0]["Hit"]);
+                    errormsg = "";
+                    return recentHit;
+                }
+                else
+                {
+                    errormsg = "No games found";
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                errormsg = e.Message;
+                return false;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
         public bool CheckIfGameOver(int userId, out string errormsg)
         {
             SqlConnection sqlConnection = new SqlConnection();
