@@ -95,7 +95,7 @@ namespace ProjektDB.Models
             {
                 sqlConnection.Open();
                 int successfulShots = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                if (successfulShots == 17)
+                if (successfulShots == 16)
                 {
                     errormsg = "";
                     return true;
