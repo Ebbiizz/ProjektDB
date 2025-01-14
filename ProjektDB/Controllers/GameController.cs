@@ -218,9 +218,11 @@ namespace ProjektDB.Controllers
                     int i = shotsMethods.ClearShots(userId, out error);
                     int j = boardsMethods.RemoveBoard(userId, out error);
                     return RedirectToAction("Lobby");
-                } 
+                }
 
-                _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hit, gameOver });
+                bool hitOrMiss = shotsMethods.GetMostRecentHit(gameId, userId, out error);
+
+                _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hitOrMiss, gameOver });
 
                 return Json(new { success = true, hit, gameOver }); 
             }
