@@ -125,7 +125,7 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-            string sqlstring = "Select Count(*) From Shots Where ShooterId = @ShooterId and hit = 'true'";
+            string sqlstring = "Select Count(*) From Shots Where ShooterId = @ShooterId and Hit = 1";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("ShooterId", System.Data.SqlDbType.Int).Value = userId;
             try
