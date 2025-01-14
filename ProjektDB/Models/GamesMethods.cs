@@ -115,7 +115,7 @@ namespace ProjektDB.Models
                     while (i < count)
                     {
                         Games game = new Games();
-                        game.Id = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["Id"]);
+                        game.Id = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["GameId"]);
                         game.Player1Id = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["Player1Id"]);
                         game.Player2Id = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["Player2Id"]);
                         game.CurrentTurn = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["CurrentTurn"]);
