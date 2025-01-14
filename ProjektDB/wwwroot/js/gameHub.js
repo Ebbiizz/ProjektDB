@@ -219,8 +219,13 @@ function updateShotResult(userId, targetX, targetY, hit, gameOver) {
         alert("Spelet är över!");
     }
 }
-
-
+function PlayerJoined(gameId) {
+    connection.invoke("PlayerJoined", gameId)
+        .then(() => {
+            console.log(`Gick med i spelet med ID ${gameId}`);
+        })
+        .catch(err => console.error("Fel vid att gå med i spelet:", err));
+}
 /*connection.on("ReceiveMessage", (user, message) => {
     console.log(`${user}: ${message}`);
 });
@@ -236,13 +241,6 @@ connection.on("StatisticsUpdated", (stats) => {
     StatisticsUpdate(stats);
 });
 
-function PlayerJoined(gameId) {
-    connection.invoke("JoinGame", gameId)
-        .then(() => {
-            console.log(`Gick med i spelet med ID ${gameId}`);
-        })
-        .catch(err => console.error("Fel vid att gå med i spelet:", err));
-}
 
 function LeaveGame(gameId) {
     connection.invoke("LeaveGame", gameId)
