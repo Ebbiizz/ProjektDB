@@ -52,7 +52,7 @@ namespace ProjektDB.Models
                 sqlCommand.Parameters.Add("TargetX", System.Data.SqlDbType.Int).Value = targetX;
                 sqlCommand.Parameters.Add("TargetY", System.Data.SqlDbType.Int).Value = targetY;
                 sqlCommand.Parameters.Add("Hit", System.Data.SqlDbType.NVarChar).Value = hit;
-                sqlCommand.Parameters.Add("ShotTime", System.Data.SqlDbType.Int).Value = DateTime.Now;
+                sqlCommand.Parameters.Add("ShotTime", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
                 try
                 {
                     sqlConnection.Open();

@@ -188,17 +188,17 @@ namespace ProjektDB.Models
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
             string sqlstring = "Select * From Games Where GameID = @GameID";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
-            sqlCommand.Parameters.Add("GameId", System.Data.SqlDbType.Int).Value = gameId;
+            sqlCommand.Parameters.Add("GameID", System.Data.SqlDbType.Int).Value = gameId;
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
             Games game = new Games();
             try
             {
                 sqlConnection.Open();
-                adapter.Fill(dataSet, "Board");
+                adapter.Fill(dataSet, "Games");
                 int i = 0;
                 int count = 0;
-                count = dataSet.Tables["Board"].Rows.Count;
+                count = dataSet.Tables["Games"].Rows.Count;
                 if (count > 0)
                 {
                     while (i < count)
@@ -209,7 +209,7 @@ namespace ProjektDB.Models
                         game.CurrentTurn = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["CurrentTurn"]);
                         game.CreatedAt = DateTime.Parse(dataSet.Tables["Games"].Rows[i]["CreatedAt"].ToString());
                         game.Status = (Status)Enum.Parse(typeof(Status), dataSet.Tables["Games"].Rows[i]["Status"].ToString());
-                        game.WinnerId = Convert.ToUInt16(dataSet.Tables["Games"].Rows[i]["WinnerID"]);
+                        game.WinnerId = 0;
                         
 
                         i++;

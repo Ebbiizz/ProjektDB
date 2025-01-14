@@ -108,6 +108,15 @@ namespace ProjektDB.Controllers
                 return View("Lobby");
             }
 
+            BoardsMethods boardMethods = new BoardsMethods();
+
+            bool boardCreated = boardMethods.CreateBoard(randomGame.Id, userId, out string boardError);
+
+            if (!boardCreated)
+            {
+                ViewBag.ErrorMessage = "Brädet kunde inte skapas: " + boardError;
+                return View("Lobby");
+            }
             _hubContext.Clients.Group(randomGame.Id.ToString()).SendAsync("PlayerJoined", userId);
 
             return RedirectToAction("Game", new { gameId = randomGame.Id });
