@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Asn1.Cmp;
 using ProjektDB.Hubs;
 using ProjektDB.Models;
@@ -124,30 +125,38 @@ namespace ProjektDB.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
-
+            string error = "";
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-
+            
             ShipsMethods shipsMethods = new ShipsMethods();
             BoardsMethods boardMethods = new BoardsMethods();
-            Boards board = boardMethods.GetBoard(gameId, userId, out string errormsg);
+            Boards board = boardMethods.GetBoard(gameId, userId, out error);
 
             if (!Enum.TryParse(shipType, out ShipType parsedShipType))
             {
                 return Json(new { success = false, message = "Ogiltig skeppstyp." });
             }
-
-            bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, parsedShipType, out string error);
-            //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
-
-
-            if (!success)
+            List<Ships> shipsOnBoard = shipsMethods.GetShipsOnBoard(board.Id, out error);
+            if (shipsOnBoard == null || shipsOnBoard.Count < 5)
             {
-                return Json(new { success = false, message = error });
+                bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, parsedShipType, out error);
+                //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
+
+
+                if (!success)
+                {
+                    return Json(new { success = false, message = error });
+                }
+
+                _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShipPlaced", new { userId, startX, startY, endX, endY, shipType });
+
+                return Json(new { success = true });
             }
-
-            _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShipPlaced", new { userId, startX, startY, endX, endY, shipType });
-
-            return Json(new { success = true });
+            else
+            {
+                //skrev detta bara för att kunna testa
+                return RedirectToAction("Game"); 
+            }
         }
 
         [HttpPost]

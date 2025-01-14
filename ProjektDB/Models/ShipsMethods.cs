@@ -73,7 +73,7 @@ namespace ProjektDB.Models
                     while (i < count)
                     {
                         Ships ship = new Ships();
-                        ship.Id = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["Id"]);
+                        ship.Id = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["ShipId"]);
                         ship.BoardId = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["BoardId"]);
                         ship.Type = (ShipType)Enum.Parse(typeof(ShipType), dataSet.Tables["Ships"].Rows[i]["Type"].ToString());
                         ship.StartX = Convert.ToUInt16(dataSet.Tables["Ships"].Rows[i]["StartX"]);
