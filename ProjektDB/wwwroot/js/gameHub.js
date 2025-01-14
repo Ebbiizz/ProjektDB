@@ -162,7 +162,7 @@ document.getElementById("fireShotBtn").addEventListener("click", async () => {
         return;
     }
 
-    const coordinates = document.getElementById("coordinates").value.trim();
+    const coordinates = document.getElementById("coordinatesShot").value.trim();
     const match = coordinates.match(/^(\d+),(\d+)$/);
 
     if (!match) {
