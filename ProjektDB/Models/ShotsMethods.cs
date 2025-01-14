@@ -88,7 +88,7 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id=sqlserver;Password=Databas123;Encrypt=True;TrustServerCertificate=True;";
-            string sqlstring = "SELECT TOP 1 Hit FROM Games ORDER BY ShotTime DESC";
+            string sqlstring = "SELECT TOP 1 Hit FROM Shots ORDER BY ShotTime DESC";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
@@ -101,7 +101,7 @@ namespace ProjektDB.Models
                 int count = dataSet.Tables["Shots"].Rows.Count;
                 if (count > 0)
                 {
-                    bool recentHit = Convert.ToBoolean(dataSet.Tables["Shots"].Rows[0]["Hit"]);
+                    bool recentHit = Convert.ToInt32(dataSet.Tables["Shots"].Rows[0]["Hit"]) == 1;
                     errormsg = "";
                     return recentHit;
                 }

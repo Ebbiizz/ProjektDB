@@ -224,7 +224,7 @@ namespace ProjektDB.Controllers
 
                 _hubContext.Clients.Group(gameId.ToString()).SendAsync("ShotFired", new { userId, targetX, targetY, hitOrMiss, gameOver });
 
-                return Json(new { success = true, hit, gameOver }); 
+                return Json(new { success = true, hit = hitOrMiss });
             }
             else
             {
