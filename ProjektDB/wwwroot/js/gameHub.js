@@ -10,12 +10,12 @@ connection.start()
 
 function initializeBoard(boardId) {
     const board = document.getElementById(boardId);
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
+    for (let i = 1; i < 11; i++) {
+        for (let j = 1; j < 11; j++) {
             const cell = document.createElement('div');
             cell.classList.add('board-cell');
-            cell.dataset.x = i;
-            cell.dataset.y = j;
+            cell.dataset.x = j;
+            cell.dataset.y = i;
             board.appendChild(cell);
         }
     }
@@ -59,15 +59,15 @@ let currentShipType = "Carrier";
 
 function validateAndPlaceShip(startX, startY, endX, endY, shipType) {
     const length = shipLengths[shipType];
-    const isHorizontal = startX === endX;
-    const isVertical = startY === endY;
+    const isVertical = startX === endX;
+    const isHorizontal = startY === endY;
 
     if (!(isHorizontal || isVertical)) {
         alert("Skepp måste placeras horisontellt eller vertikalt.");
         return false;
     }
 
-    const shipLength = isHorizontal ? Math.abs(endY - startY) + 1 : Math.abs(endX - startX) + 1;
+    const shipLength = isHorizontal ? Math.abs(endX - startX) + 1 : Math.abs(endY - startY) + 1;
     if (shipLength !== length) {
         alert(`Ogiltig längd. ${shipType} måste vara ${length} celler lång.`);
         return false;
