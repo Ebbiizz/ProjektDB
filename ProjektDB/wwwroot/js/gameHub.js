@@ -189,8 +189,21 @@ document.getElementById("fireShotBtn").addEventListener("click", async () => {
     });
 
     const result = await response.json();
+    console.log(result);
     if (result.success) {
         alert("Skott avfyrat!");
+        const boardId = "opponent-board";
+        const board = document.getElementById(boardId);
+
+        const cell = board.querySelector(`[data-x="${targetX}"][data-y="${targetY}"]`);
+        if (cell) {
+            console.log(`Cell updated with class: ${result.hit ? "hit" : "miss"}`);
+            cell.classList.add(result.hit ? "hit" : "miss");
+        }
+
+        if (result.gameOver) {
+            alert("Spelet är över!");
+        }
     } else {
         alert(result.message);
     }
@@ -198,10 +211,10 @@ document.getElementById("fireShotBtn").addEventListener("click", async () => {
 
 // Hantera signal från servern när ett skott avfyras
 connection.on("ShotFired", ({ userId, targetX, targetY, hit, gameOver }) => {
-    updateShotResult(userId, targetX, targetY, hit, gameOver);
+    console.log("ShotFired event received:", { userId, targetX, targetY, hit, gameOver });
 });
 
-function updateShotResult(userId, targetX, targetY, hit, gameOver) {
+/*function updateShotResult(userId, targetX, targetY, hit, gameOver) {
     const boardId = "opponent-board";
     const board = document.getElementById(boardId);
 
@@ -212,13 +225,14 @@ function updateShotResult(userId, targetX, targetY, hit, gameOver) {
 
     const cell = board.querySelector(`[data-x="${targetX}"][data-y="${targetY}"]`);
     if (cell) {
+        console.log(`Cell updated with class: ${hit ? "hit" : "miss"}`);
         cell.classList.add(hit ? "hit" : "miss");
     }
 
     if (gameOver) {
         alert("Spelet är över!");
     }
-}
+}*/
 function PlayerJoined(gameId) {
     connection.invoke("PlayerJoined", gameId)
         .then(() => {
@@ -226,68 +240,4 @@ function PlayerJoined(gameId) {
         })
         .catch(err => console.error("Fel vid att gå med i spelet:", err));
 }
-/*connection.on("ReceiveMessage", (user, message) => {
-    console.log(`${user}: ${message}`);
-});
-
-
-connection.on("ShotFired", (data) => {
-    console.log(`Skott avfyrat: (${data.targetX}, ${data.targetY})`);
-    // Uppdatera brädet visuellt med resultatet av skottet
-    updateShotResult(data.userId, data.targetX, data.targetY, data.hit);
-});
-
-connection.on("StatisticsUpdated", (stats) => {
-    StatisticsUpdate(stats);
-});
-
-
-function LeaveGame(gameId) {
-    connection.invoke("LeaveGame", gameId)
-        .then(() => {
-            console.log(`Lämnade spelet med ID ${gameId}`);
-        })
-        .catch(err => console.error("Fel vid att lämna spelet:", err));
-}
-
-function StatisticsUpdate(stats) {
-    document.querySelector("#matchesPlayed").innerText = stats.MatchesPlayed;
-    document.querySelector("#matchesWon").innerText = stats.MatchesWon;
-    document.querySelector("#matchesLost").innerText = stats.MatchesLost;
-    document.querySelector("#winPercentage").innerText = `${stats.WinPercentage}%`;
-}
-
-function FireShot(gameId, targetX, targetY) {
-    connection.invoke("FireShot", gameId, targetX, targetY)
-        .then(() => {
-            console.log(`Skott avfyrat mot (${targetX}, ${targetY}) i spelet med ID ${gameId}`);
-        })
-        .catch(err => console.error("Fel vid avfyrning av skott:", err));
-}
-
-/*function updateShotResult(userId, targetX, targetY, hit) {
-    const boardId = userId === 1 ? 'opponentBoard' : 'playerBoard'; // Uppdatera motståndarens bräde vid skott
-    const board = document.getElementById(boardId);
-
-    const shotResult = document.createElement('div');
-    shotResult.classList.add('shot');
-    shotResult.style.gridColumnStart = targetX + 1;
-    shotResult.style.gridRowStart = targetY + 1;
-    shotResult.classList.add(hit ? 'hit' : 'miss');
-
-    board.appendChild(shotResult);
-}
-
-document.getElementById('placeShipsBtn').addEventListener('click', () => {
-    // Skicka platsinformation för att placera ett skepp
-    const startX = 2, startY = 3, endX = 4, endY = 3, shipType = 'Battleship';
-    PlaceShip(1, startX, startY, endX, endY, shipType); // Antag att 1 är spelaren
-});
-
-document.getElementById('fireShotBtn').addEventListener('click', () => {
-    // Skicka skottinformation
-    const targetX = 3, targetY = 3;
-    FireShot(1, targetX, targetY); // Antag att 1 är spelaren
-});*/
-
 

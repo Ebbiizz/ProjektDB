@@ -28,13 +28,17 @@
 }*/
 
 /* Stil för träffar */
-.board-cell.hit {
-    background-color: red; /* Träff markeras med röd färg */
-    color: white; /* Texten blir vit */
-    font-weight: bold;
-}
+    .board-cell.hit {
+        background-color: green; /* Träff markeras med röd färg */
+        display: block; /* Gör det till ett block-level element så att det får hela utrymmet */
+        width: 100%;
+        height: 100%;
+    }
 
 /* Stil för missar */
-.board-cell.miss {
-    background-color: lightblue; /* Miss markeras med ljusblå färg */
-}
+    .board-cell.miss {
+        background-color: red; /* Miss markeras med ljusblå färg */
+        display: block; /* Gör det till ett block-level element så att det får hela utrymmet */
+        width: 100%;
+        height: 100%;
+    }
