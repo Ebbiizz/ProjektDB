@@ -62,9 +62,10 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-            string sqlstring = "Insert Into Games (Player1Id, CreatedAt, Status) Values (@Player1Id, @CreatedAt, @Status)";
+            string sqlstring = "Insert Into Games (Player1Id, CurrentTurn, CreatedAt, Status) Values (@Player1Id, @CurrentTurn, @CreatedAt, @Status)";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             sqlCommand.Parameters.Add("Player1Id", System.Data.SqlDbType.Int).Value = userId;
+            sqlCommand.Parameters.Add("CurrentTurn", System.Data.SqlDbType.Int).Value = userId;
             sqlCommand.Parameters.Add("CreatedAt", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
             sqlCommand.Parameters.Add("Status", System.Data.SqlDbType.NVarChar).Value = "Waiting";
 
@@ -97,7 +98,7 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-            string sqlstring = "Select * From Games Where Status = ´waiting´";
+            string sqlstring = "Select * From Games Where Status = ´Waiting´";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataSet dataSet = new DataSet();
