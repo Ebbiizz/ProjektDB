@@ -73,4 +73,6 @@ ALTER TABLE Shots ALTER COLUMN ShotTime DATETIME;
 
 SELECT * FROM Boards WHERE GameId = 51 AND UserId = 1
 
+
 SELECT * FROM Shots
+SELECT * FROM Boards

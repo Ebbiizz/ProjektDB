@@ -132,7 +132,7 @@ namespace ProjektDB.Models
             {
                 sqlConnection.Open();
                 int successfulShots = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                if (successfulShots == 16)
+                if (successfulShots >= 16)
                 {
                     errormsg = "";
                     return true;
@@ -157,9 +157,9 @@ namespace ProjektDB.Models
         {
             SqlConnection sqlConnection = new SqlConnection();
             sqlConnection.ConnectionString = "Server=35.228.190.64,1433;Database=sankaskepp;User Id = sqlserver;Password =Databas123;Encrypt = True; TrustServerCertificate = True;";
-            string sqlstring = "Delete From Shots Where userId = @userId";
+            string sqlstring = "Delete From Shots Where ShooterID = @ShooterID";
             SqlCommand sqlCommand = new SqlCommand(sqlstring, sqlConnection);
-            sqlCommand.Parameters.Add("UserId", System.Data.SqlDbType.Int).Value = userId;
+            sqlCommand.Parameters.Add("ShooterID", System.Data.SqlDbType.Int).Value = userId;
             try
             {
                 sqlConnection.Open();

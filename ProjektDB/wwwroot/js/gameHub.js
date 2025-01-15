@@ -191,6 +191,7 @@ document.getElementById("fireShotBtn").addEventListener("click", async () => {
     const result = await response.json();
     console.log(result);
     if (result.success) {
+        let i = 0;
         alert("Skott avfyrat!");
         const boardId = "opponent-board";
         const board = document.getElementById(boardId);
