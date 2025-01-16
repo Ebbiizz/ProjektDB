@@ -26,6 +26,7 @@ window.onload = () => {
     initializeBoard('opponent-board');
 };
 
+
 const shipLengths = {
     Carrier: 5,
     Battleship: 4,
@@ -33,7 +34,6 @@ const shipLengths = {
     Submarine: 3,
     Destroyer: 2
 };
-
 
 function determineShipType(startX, startY, endX, endY) {
     let shipLength;
@@ -76,7 +76,7 @@ function validateAndPlaceShip(startX, startY, endX, endY, shipType) {
     return true;
 }
 
-document.getElementById("placeShipManualBtn").addEventListener("click", async () => {
+document.getElementById("placeShipBtn").addEventListener("click", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const gameId = urlParams.get('gameId');
 
@@ -126,31 +126,8 @@ document.getElementById("placeShipManualBtn").addEventListener("click", async ()
 });
 
 connection.on("ShipPlaced", ({ userId, startX, startY, endX, endY, shipType }) => {
-    // Anropa updateBoard-funktionen för att uppdatera spelarens bräde
     updateBoard(userId, startX, startY, endX, endY, shipType);
 });
-
-function updateBoard(userId, startX, startY, endX, endY, shipType) {
-    // Kontrollera om det är spelarens egna bräde (userId är 1 för spelaren)
-    const boardId = userId === 1 ? "player-board" : null;
-    if (!boardId) return; // Om det inte är spelarens bräde, gör inget
-
-    const board = document.getElementById(boardId);
-
-    // Markera cellerna där skeppet är placerat
-    const isHorizontal = startY === endY;
-    const length = isHorizontal ? Math.abs(endX - startX) + 1 : Math.abs(endY - startY) + 1;
-
-    for (let i = 0; i < length; i++) {
-        const x = isHorizontal ? startX + i : startX;
-        const y = isHorizontal ? startY : startY + i;
-
-        const cell = board.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-        if (cell) {
-            cell.classList.add("ship"); // Lägg till klassen 'ship' för att markera cellen
-        }
-    }
-}
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 document.getElementById("fireShotBtn").addEventListener("click", async () => {
@@ -210,35 +187,8 @@ document.getElementById("fireShotBtn").addEventListener("click", async () => {
     }
 });
 
-// Hantera signal från servern när ett skott avfyras
+
 connection.on("ShotFired", ({ userId, targetX, targetY, hit, gameOver }) => {
     console.log("ShotFired event received:", { userId, targetX, targetY, hit, gameOver });
 });
-
-/*function updateShotResult(userId, targetX, targetY, hit, gameOver) {
-    const boardId = "opponent-board";
-    const board = document.getElementById(boardId);
-
-    if (!board) {
-        console.error("Board kunde inte hittas för användar-ID:", userId);
-        return;
-    }
-
-    const cell = board.querySelector(`[data-x="${targetX}"][data-y="${targetY}"]`);
-    if (cell) {
-        console.log(`Cell updated with class: ${hit ? "hit" : "miss"}`);
-        cell.classList.add(hit ? "hit" : "miss");
-    }
-
-    if (gameOver) {
-        alert("Spelet är över!");
-    }
-}*/
-function PlayerJoined(gameId) {
-    connection.invoke("PlayerJoined", gameId)
-        .then(() => {
-            console.log(`Gick med i spelet med ID ${gameId}`);
-        })
-        .catch(err => console.error("Fel vid att gå med i spelet:", err));
-}
 

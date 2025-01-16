@@ -5,16 +5,11 @@ using Org.BouncyCastle.Asn1.Cmp;
 using ProjektDB.Hubs;
 using ProjektDB.Models;
 
-////Lägg in i alla vyer för att signal r ska funka:
-//<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.9/signalr.min.js"></script>
-//<script src="~/wwwroot/js/gameHub.js"></script>
-
-
 namespace ProjektDB.Controllers
 {
     public class GameController : Controller
     {
-        private readonly IHubContext<GameHub> _hubContext; //Signal-R
+        private readonly IHubContext<GameHub> _hubContext;
 
         public GameController(IHubContext<GameHub> hubContext)
         {
@@ -37,7 +32,7 @@ namespace ProjektDB.Controllers
             if (error != null)
             {
                 ViewBag.ErrorMessage = "Spelet kunde inte hämtas: " + error;
-            } // Eller, inga aktiva spel. 
+            }
 
             return View(activeGames);
         }
@@ -62,7 +57,6 @@ namespace ProjektDB.Controllers
                 return View("Lobby"); 
             }
 
-            // Skapar bräde
             BoardsMethods boardMethods = new BoardsMethods();
             int recentGameId = gamesMethods.GetRecentGameId(out string errormsg);
 
@@ -149,8 +143,6 @@ namespace ProjektDB.Controllers
             if (shipsOnBoard == null || shipsOnBoard.Count < 5)
             {
                 bool success = shipsMethods.PlaceShip(board.Id, startX, startY, endX, endY, parsedShipType, out error);
-                //Validera placering:, Skeppen får inte överlappa varandra, skeppen måste ligga inom brädets gränser.
-
 
                 if (!success)
                 {
@@ -163,7 +155,6 @@ namespace ProjektDB.Controllers
             }
             else
             {
-                //skrev detta bara för att kunna testa
                 return RedirectToAction("Game"); 
             }
         }
@@ -201,15 +192,12 @@ namespace ProjektDB.Controllers
                 ShotsMethods shotsMethods = new ShotsMethods();
 
                 bool hit = shotsMethods.FireShot(gameId, userId, targetX, targetY, out string error);
-                // Validera om skottet är på en giltig position.
-                // Kontrollera om skottet träffar ett skepp = markera vilka delar som är träffade, om alla delar av ett skepp är träffade, markera det som sänkt.
 
                 if (!string.IsNullOrEmpty(error))
                 {
                     return Json(new { success = false, message = error });
                 }
 
-                //ändrat till från gameId till userId då det bara är den som just sköt som kan ha vunnit
                 bool gameOver = shotsMethods.CheckIfGameOver(userId, out error);
 
                 if (gameOver == true)
@@ -231,7 +219,7 @@ namespace ProjektDB.Controllers
             }
         }
 
-        public IActionResult ResumeGame(int gameId) //Lagra gameID i vyn för ouppklarade games
+        public IActionResult ResumeGame(int gameId)
         {
             if (!HttpContext.Session.Keys.Contains("UserId"))
             {
@@ -242,8 +230,6 @@ namespace ProjektDB.Controllers
 
             GamesMethods gamesMethods = new GamesMethods();
             Games game = gamesMethods.GetGameById(gameId, out string error);
-            // Ladda tidigare spelstatus, inklusive: skeppens placering, skott, vems tur det är.
-            // spelstatus hämtas i samband med GameID men hur hämtas skeppens placering, skott och vems tur det är? Kan ej hitta att det är PK/FK någonstans till gameID
 
             if (game == null || !string.IsNullOrEmpty(error))
             {
@@ -279,13 +265,5 @@ namespace ProjektDB.Controllers
                 WinPercentage = userStats.WinPercentage
             });
         }
-
-
-        /*---------------------------------------------- Game Logic ----------------------------------------------*/
-
-        // Hantera turordning:
-        // Kontrollera om det är spelarens tur.
-        // Låt spelaren välja en position att skjuta på.
-
     }
 }

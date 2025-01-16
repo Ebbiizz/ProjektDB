@@ -15,7 +15,6 @@ namespace ProjektDB.Hubs
             }
             catch (Exception ex)
             {
-                // Logga felet
                 Console.WriteLine($"Fel vid inlämning till grupp: {ex.Message}");
             }
             await base.OnConnectedAsync();
@@ -31,26 +30,11 @@ namespace ProjektDB.Hubs
             }
             catch (Exception ex)
             {
-                // Logga felet
                 Console.WriteLine($"Fel vid borttagning från grupp: {ex.Message}");
             }
             await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
-
-        public async Task JoinGame(int gameId)
-        {
-            await Groups.AddToGroupAsync(Context.ConnectionId, gameId.ToString());
-        }
-
-        public async Task LeaveGame(int gameId)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, gameId.ToString());
-        }
 
         public async Task ShipPlaced(int gameId, int userId, int startX, int startY, int endX, int endY, string shipType)
         {
@@ -108,19 +92,6 @@ namespace ProjektDB.Hubs
                 MatchesLost = userStats.MatchesLost,
                 WinPercentage = userStats.WinPercentage
             });
-        }
-
-        // Hjälpmetoder för att kontrollera om skottet träffade eller om spelet är över
-        private bool CheckIfHit(int targetX, int targetY)
-        {
-            // Här kan du implementera logik för att avgöra om skottet träffade
-            return false;
-        }
-
-        private bool CheckIfGameOver(int gameId)
-        {
-            // Här kan du implementera logik för att avgöra om spelet är över
-            return false;
         }
     }
 }
