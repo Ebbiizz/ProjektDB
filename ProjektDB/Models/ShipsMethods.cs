@@ -28,12 +28,13 @@ namespace ProjektDB.Models
                     if (i == 1)
                     {
                         errormsg = "";
+                        return true;
                     }
                     else
                     {
                         errormsg = "Insert command failed";
+                        return false;
                     }
-                    return true;
                 }
                 catch (Exception ex)
                 {
